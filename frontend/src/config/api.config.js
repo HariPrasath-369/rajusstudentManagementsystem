@@ -1,6 +1,6 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:8080/api',
+  BASE_URL: process.env.REACT_APP_API_URL || 'https://studentmanagementsystem-7mis.onrender.com' || 'http://localhost:8080/api',
   WS_URL: process.env.REACT_APP_WS_URL || 'ws://localhost:8080/ws',
   TIMEOUT: 30000,
   RETRY_COUNT: 3,
