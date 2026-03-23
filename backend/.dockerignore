@@ -1,0 +1,13 @@
+target/
+.mvn/
+mvnw
+mvnw.cmd
+.env
+.git/
+.gitignore
+*.md
+.idea/
+.vscode/
+help.md
+pom.xml.releaseBackup
+release.properties
