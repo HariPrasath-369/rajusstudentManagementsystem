@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marks Published Notification</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .marks-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .marks-card h2 {
+            margin: 0;
+            font-size: 36px;
+        }
+        .performance {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .grade {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .grade-A { color: #4caf50; }
+        .grade-B { color: #2196f3; }
+        .grade-C { color: #ff9800; }
+        .grade-D { color: #f44336; }
+        .grade-F { color: #9e9e9e; }
+        .details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .details td {
+            padding: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .details td:first-child {
+            font-weight: bold;
+            width: 50%;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #6c757d;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .button:hover {
+            background: #5a67d8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Marks Published</h1>
+        </div>
+        
+        <div class="content">
+            <p>Dear <strong th:text="${studentName}">Student Name</strong>,</p>
+            
+            <div class="marks-card">
+                <h3 th:text="${subject}">Subject Name</h3>
+                <h2 th:text="${marksObtained} + ' / ' + ${maxMarks}">85 / 100</h2>
+                <p>Percentage: <strong th:text="${percentage} + '%'">85%</strong></p>
+            </div>
+            
+            <div class="performance">
+                <p>Your Grade:</p>
+                <div th:class="'grade ' + ${gradeClass}" class="grade" th:text="${grade}">A</div>
+                <p th:if="${grade == 'A' || grade == 'A+'}">🎉 Excellent performance! Keep up the great work!</p>
+                <p th:if="${grade == 'B' || grade == 'B+'}">👍 Good job! Aim for higher next time!</p>
+                <p th:if="${grade == 'C' || grade == 'C+'}">📚 Need improvement. Focus more on the subject.</p>
+                <p th:if="${grade == 'D'}">⚠️ Requires attention. Please consult your teacher.</p>
+                <p th:if="${grade == 'F'}">❌ Needs significant improvement. Please contact your teacher for guidance.</p>
+            </div>
+            
+            <div class="details">
+                <h3>📋 Assessment Details:</h3>
+                <table>
+                    <tr>
+                        <td>Subject:</td>
+                        <td th:text="${subject}">Data Structures</td>
+                    </tr>
+                    <tr>
+                        <td>Subject Code:</td>
+                        <td th:text="${subjectCode}">CS201</td>
+                    </tr>
+                    <tr>
+                        <td>Assessment Type:</td>
+                        <td th:text="${assessmentType}">Semester Exam</td>
+                    </tr>
+                    <tr>
+                        <td>Semester:</td>
+                        <td th:text="${semester}">3</td>
+                    </tr>
+                    <tr>
+                        <td>Academic Year:</td>
+                        <td th:text="${academicYear}">2024-2025</td>
+                    </tr>
+                    <tr>
+                        <td>Published On:</td>
+                        <td th:text="${publishedDate}">2024-01-15</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="details" th:if="${classAverage}">
+                <h3>📈 Class Statistics:</h3>
+                <table>
+                    <tr>
+                        <td>Class Average:</td>
+                        <td th:text="${classAverage} + '%'">78%</td>
+                    </tr>
+                    <tr>
+                        <td>Highest Score:</td>
+                        <td th:text="${highestScore}">95%</td>
+                    </tr>
+                    <tr>
+                        <td>Your Rank:</td>
+                        <td th:text="${rank}">15</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="performance">
+                <p><strong>💡 Tips for Improvement:</strong></p>
+                <ul>
+                    <li>Review the topics where you lost marks</li>
+                    <li>Practice more problems in weak areas</li>
+                    <li>Attend doubt-clearing sessions</li>
+                    <li>Discuss with classmates and teachers</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a th:href="${portalUrl}" class="button">View Detailed Marksheet</a>
+            </div>
+            
+            <p>Best regards,<br>
+            <strong>Student Management System Team</strong></p>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated notification. For any discrepancies, please contact your subject teacher.</p>
+            <p>&copy; 2024 Student Management System. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

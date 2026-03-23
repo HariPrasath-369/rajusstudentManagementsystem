@@ -1,0 +1,76 @@
+﻿
+comprehensive_errors.lo
+g:29:[ERROR] 
+COMPILATION ERROR : 
+comprehensive_errors.lo
+g:31:[ERROR] /D:/rajasa
+bari/student-management
+-system - Copy - Copy/b
+ackend/src/main/java/co
+m/university/sms/servic
+e/impl/AnalyticsService
+Impl.java:[215,66] 
+cannot find symbol
+comprehensive_errors.lo
+g:42:[ERROR] Failed to 
+execute goal org.apache
+.maven.plugins:maven-co
+mpiler-plugin:3.11.0:co
+mpile 
+(default-compile) on 
+project student-managem
+ent-system: 
+Compilation failure
+comprehensive_errors.lo
+g:43:[ERROR] /D:/rajasa
+bari/student-management
+-system - Copy - Copy/b
+ackend/src/main/java/co
+m/university/sms/servic
+e/impl/AnalyticsService
+Impl.java:[215,66] 
+cannot find symbol
+comprehensive_errors.lo
+g:44:[ERROR]   symbol: 
+  method getTrendData(j
+ava.lang.Long)
+comprehensive_errors.lo
+g:45:[ERROR]   
+location: variable 
+attendanceRepository 
+of type com.university.
+sms.repository.Attendan
+ceRepository
+comprehensive_errors.lo
+g:46:[ERROR] 
+comprehensive_errors.lo
+g:47:[ERROR] -> [Help 
+1]
+comprehensive_errors.lo
+g:48:[ERROR] 
+comprehensive_errors.lo
+g:49:[ERROR] To see 
+the full stack trace 
+of the errors, re-run 
+Maven with the -e 
+switch.
+comprehensive_errors.lo
+g:50:[ERROR] Re-run 
+Maven using the -X 
+switch to enable full 
+debug logging.
+comprehensive_errors.lo
+g:51:[ERROR] 
+comprehensive_errors.lo
+g:52:[ERROR] For more 
+information about the 
+errors and possible 
+solutions, please read 
+the following articles:
+comprehensive_errors.lo
+g:53:[ERROR] [Help 1] h
+ttp://cwiki.apache.org/
+confluence/display/MAVE
+N/MojoFailureException
+
+

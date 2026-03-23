@@ -1,0 +1,1076 @@
+
+## Rate Limiting
+- 100 requests per minute for authenticated endpoints
+- 20 requests per minute for public endpoints
+version: 1.0.0
+contact:
+name: API Support
+email: support@university.edu
+url: https://university.edu/support
+license:
+name: Apache 2.0
+url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+- url: http://localhost:8080/api
+description: Development Server
+- url: https://api.university.edu/api
+description: Production Server
+
+tags:
+- name: Authentication
+description: User authentication and registration endpoints
+- name: Principal
+description: Principal-only operations (department and HOD management)
+- name: HOD
+description: HOD-only operations (teacher and class management)
+- name: Teacher
+description: Teacher operations (marks, materials, OEM board)
+- name: Student
+description: Student operations (attendance, leaves, marks)
+- name: Attendance
+description: Attendance management endpoints
+- name: Timetable
+description: Timetable management endpoints
+- name: Marks
+description: Marks and grade management
+- name: Notifications
+description: Notification management
+- name: Files
+description: File upload and download
+- name: Analytics
+description: Analytics and reporting endpoints
+- name: Dashboard
+description: Dashboard data endpoints
+
+components:
+securitySchemes:
+bearerAuth:
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: Enter JWT token obtained from login endpoint
+
+schemas:
+# Common Response Types
+ApiResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+      example: true
+    message:
+      type: string
+      example: "Operation completed successfully"
+    timestamp:
+      type: string
+      format: date-time
+      example: "2024-01-15T10:30:00"
+    data:
+      type: object
+      description: Response data (optional)
+
+ErrorResponse:
+  type: object
+  properties:
+    timestamp:
+      type: string
+      format: date-time
+    status:
+      type: integer
+      example: 400
+    error:
+      type: string
+      example: "Bad Request"
+    message:
+      type: string
+      example: "Validation failed"
+    path:
+      type: string
+      example: "/api/students"
+    errors:
+      type: object
+      additionalProperties:
+        type: string
+      description: Validation errors (if any)
+
+# Authentication
+LoginRequest:
+  type: object
+  required:
+    - email
+    - password
+  properties:
+    email:
+      type: string
+      format: email
+      example: "student@university.edu"
+    password:
+      type: string
+      format: password
+      example: "password123"
+
+AuthResponse:
+  type: object
+  properties:
+    accessToken:
+      type: string
+      example: "eyJhbGciOiJIUzUxMiJ9..."
+    tokenType:
+      type: string
+      example: "Bearer"
+    userId:
+      type: integer
+      example: 1
+    name:
+      type: string
+      example: "John Doe"
+    email:
+      type: string
+      example: "john.doe@university.edu"
+    role:
+      type: string
+      example: "ROLE_STUDENT"
+
+# User Models
+User:
+  type: object
+  properties:
+    id:
+      type: integer
+      example: 1
+    name:
+      type: string
+      example: "John Doe"
+    email:
+      type: string
+      example: "john.doe@university.edu"
+    role:
+      type: string
+      enum: [ROLE_PRINCIPAL, ROLE_HOD, ROLE_TEACHER, ROLE_CA, ROLE_STUDENT]
+    isActive:
+      type: boolean
+      example: true
+    emailVerified:
+      type: boolean
+      example: true
+    phoneNumber:
+      type: string
+      example: "+1234567890"
+    profilePicture:
+      type: string
+      example: "/uploads/profile-1.jpg"
+    createdAt:
+      type: string
+      format: date-time
+    lastLogin:
+      type: string
+      format: date-time
+
+# Department
+Department:
+  type: object
+  properties:
+    id:
+      type: integer
+    name:
+      type: string
+      example: "Computer Science"
+    code:
+      type: string
+      example: "CSE"
+    description:
+      type: string
+      example: "Department of Computer Science and Engineering"
+    establishedYear:
+      type: integer
+      example: 2000
+    hodId:
+      type: integer
+      example: 5
+    hodName:
+      type: string
+      example: "Dr. John Smith"
+    createdAt:
+      type: string
+      format: date-time
+
+# Class
+Class:
+  type: object
+  properties:
+    id:
+      type: integer
+    departmentId:
+      type: integer
+    departmentName:
+      type: string
+    year:
+      type: integer
+      example: 3
+    section:
+      type: string
+      example: "A"
+    className:
+      type: string
+      example: "CSE 3A"
+    classSize:
+      type: integer
+      example: 60
+    advisorId:
+      type: integer
+    advisorName:
+      type: string
+    studentCount:
+      type: integer
+
+# Attendance
+Attendance:
+  type: object
+  properties:
+    id:
+      type: integer
+    studentId:
+      type: integer
+    studentName:
+      type: string
+    rollNumber:
+      type: string
+    classId:
+      type: integer
+    className:
+      type: string
+    date:
+      type: string
+      format: date
+    status:
+      type: string
+      enum: [PRESENT, ABSENT, LATE, LEAVE]
+    isSubmitted:
+      type: boolean
+    subjectName:
+      type: string
+
+# Marks
+Marks:
+  type: object
+  properties:
+    id:
+      type: integer
+    studentId:
+      type: integer
+    studentName:
+      type: string
+    rollNumber:
+      type: string
+    subjectId:
+      type: integer
+    subjectName:
+      type: string
+    subjectCode:
+      type: string
+    marksType:
+      type: string
+      enum: [ASSESSMENT, PRACTICAL, SEMESTER, INTERNAL, EXTERNAL]
+    marksObtained:
+      type: number
+      format: double
+      example: 85.5
+    maxMarks:
+      type: number
+      format: double
+      example: 100
+    percentage:
+      type: number
+      format: double
+      example: 85.5
+    semester:
+      type: integer
+    isPublished:
+      type: boolean
+
+# Leave
+Leave:
+  type: object
+  properties:
+    id:
+      type: integer
+    studentId:
+      type: integer
+    studentName:
+      type: string
+    rollNumber:
+      type: string
+    startDate:
+      type: string
+      format: date
+    endDate:
+      type: string
+      format: date
+    reason:
+      type: string
+    status:
+      type: string
+      enum: [PENDING, APPROVED, REJECTED]
+    appliedAt:
+      type: string
+      format: date-time
+    approvedAt:
+      type: string
+      format: date-time
+    rejectionReason:
+      type: string
+
+# Timetable
+Timetable:
+  type: object
+  properties:
+    id:
+      type: integer
+    classId:
+      type: integer
+    className:
+      type: string
+    subjectId:
+      type: integer
+    subjectName:
+      type: string
+    subjectCode:
+      type: string
+    teacherId:
+      type: integer
+    teacherName:
+      type: string
+    dayOfWeek:
+      type: string
+      enum: [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY]
+    startTime:
+      type: string
+      format: time
+      example: "09:00:00"
+    endTime:
+      type: string
+      format: time
+      example: "10:00:00"
+    roomNumber:
+      type: string
+      example: "Room 201"
+
+# Notification
+Notification:
+  type: object
+  properties:
+    id:
+      type: integer
+    title:
+      type: string
+    message:
+      type: string
+    type:
+      type: string
+    isRead:
+      type: boolean
+    createdAt:
+      type: string
+      format: date-time
+    actionUrl:
+      type: string
+
+# Dashboard
+DashboardResponse:
+  type: object
+  properties:
+    statistics:
+      type: object
+      additionalProperties:
+        type: integer
+    charts:
+      type: object
+    recentActivities:
+      type: array
+      items:
+        type: object
+    notifications:
+      type: array
+      items:
+        $ref: '#/components/schemas/Notification'
+    quickActions:
+      type: object
+
+# Analytics
+AnalyticsResponse:
+  type: object
+  properties:
+    summary:
+      type: object
+    trends:
+      type: array
+      items:
+        type: object
+    averages:
+      type: object
+    topPerformers:
+      type: array
+    predictions:
+      type: object
+
+security:
+- bearerAuth: []
+
+paths:
+# Authentication Endpoints
+/auth/login:
+post:
+  tags:
+    - Authentication
+  summary: Authenticate user and get JWT token
+  operationId: login
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/LoginRequest'
+  responses:
+    '200':
+      description: Successful login
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthResponse'
+    '401':
+      description: Invalid credentials
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+/auth/register:
+post:
+  tags:
+    - Authentication
+  summary: Register a new user
+  operationId: register
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/RegisterRequest'
+  responses:
+    '200':
+      description: Registration successful
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthResponse'
+    '400':
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+/auth/send-otp:
+post:
+  tags:
+    - Authentication
+  summary: Send OTP for password reset
+  operationId: sendOtp
+  parameters:
+    - name: email
+      in: query
+      required: true
+      schema:
+        type: string
+        format: email
+  responses:
+    '200':
+      description: OTP sent successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiResponse'
+    '404':
+      description: User not found
+
+# Principal Endpoints
+/principal/departments:
+post:
+  tags:
+    - Principal
+  summary: Create a new department
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/DepartmentRequest'
+  responses:
+    '200':
+      description: Department created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Department'
+
+/principal/hods:
+get:
+  tags:
+    - Principal
+  summary: Get all HODs
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: List of HODs
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+
+# HOD Endpoints
+/hod/teachers:
+post:
+  tags:
+    - HOD
+  summary: Create a new teacher
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/TeacherRequest'
+  responses:
+    '200':
+      description: Teacher created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+
+/hod/classes:
+get:
+  tags:
+    - HOD
+  summary: Get all classes in department
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: List of classes
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Class'
+
+/hod/timetable:
+post:
+  tags:
+    - HOD
+  summary: Create timetable entry
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/TimetableRequest'
+  responses:
+    '200':
+      description: Timetable entry created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Timetable'
+
+# Teacher Endpoints
+/teacher/marks:
+post:
+  tags:
+    - Teacher
+  summary: Upload marks for students
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/MarksRequest'
+  responses:
+    '200':
+      description: Marks uploaded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiResponse'
+
+/teacher/materials:
+post:
+  tags:
+    - Teacher
+  summary: Upload study materials
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            file:
+              type: string
+              format: binary
+            title:
+              type: string
+            description:
+              type: string
+            subjectId:
+              type: integer
+            type:
+              type: string
+  responses:
+    '200':
+      description: Material uploaded
+
+/teacher/oem-board:
+get:
+  tags:
+    - Teacher
+  summary: Get OEM board data
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: classId
+      in: query
+      required: true
+      schema:
+        type: integer
+    - name: subjectId
+      in: query
+      required: true
+      schema:
+        type: integer
+  responses:
+    '200':
+      description: OEM board data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OemBoardResponse'
+
+# Student Endpoints
+/student/attendance:
+get:
+  tags:
+    - Student
+  summary: Get attendance percentage
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: Attendance percentage
+      content:
+        application/json:
+          schema:
+            type: number
+            format: double
+
+/student/leaves:
+post:
+  tags:
+    - Student
+  summary: Apply for leave
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/LeaveRequest'
+  responses:
+    '200':
+      description: Leave applied
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Leave'
+
+/student/timetable:
+get:
+  tags:
+    - Student
+  summary: Get weekly timetable
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: Weekly timetable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WeeklyTimetableResponse'
+
+/student/marks/download:
+get:
+  tags:
+    - Student
+  summary: Download marksheet as PDF
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: semester
+      in: query
+      required: true
+      schema:
+        type: integer
+  responses:
+    '200':
+      description: PDF file
+      content:
+        application/pdf:
+          schema:
+            type: string
+            format: binary
+
+# Attendance Endpoints
+/attendance/mark:
+post:
+  tags:
+    - Attendance
+  summary: Mark attendance for a class
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/AttendanceRequest'
+  responses:
+    '200':
+      description: Attendance marked
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Attendance'
+
+/attendance/submit:
+post:
+  tags:
+    - Attendance
+  summary: Submit attendance (makes it immutable)
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: classId
+      in: query
+      required: true
+      schema:
+        type: integer
+    - name: date
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date
+  responses:
+    '200':
+      description: Attendance submitted
+
+/attendance/qr/generate:
+post:
+  tags:
+    - Attendance
+  summary: Generate QR code for attendance
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: classId
+      in: query
+      required: true
+      schema:
+        type: integer
+    - name: date
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date
+  responses:
+    '200':
+      description: QR code (base64)
+      content:
+        text/plain:
+          schema:
+            type: string
+
+# Analytics Endpoints
+/analytics/institution/performance:
+get:
+  tags:
+    - Analytics
+  summary: Get institution performance analytics
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: Performance data
+
+/analytics/student-failure-prediction:
+get:
+  tags:
+    - Analytics
+  summary: AI-based student failure prediction
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: Risk predictions
+
+# Dashboard Endpoints
+/dashboard:
+get:
+  tags:
+    - Dashboard
+  summary: Get dashboard data based on user role
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: Dashboard data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DashboardResponse'
+
+# Additional schemas for requests
+components:
+schemas:
+RegisterRequest:
+  type: object
+  required:
+    - name
+    - email
+    - password
+  properties:
+    name:
+      type: string
+      minLength: 2
+      maxLength: 100
+    email:
+      type: string
+      format: email
+    password:
+      type: string
+      minLength: 6
+      maxLength: 100
+    role:
+      type: string
+      enum: [ROLE_PRINCIPAL, ROLE_HOD, ROLE_TEACHER, ROLE_STUDENT]
+
+DepartmentRequest:
+  type: object
+  required:
+    - name
+    - code
+  properties:
+    name:
+      type: string
+    code:
+      type: string
+    description:
+      type: string
+    establishedYear:
+      type: integer
+
+TeacherRequest:
+  type: object
+  required:
+    - name
+    - email
+    - password
+    - employeeId
+  properties:
+    name:
+      type: string
+    email:
+      type: string
+    password:
+      type: string
+    phoneNumber:
+      type: string
+    employeeId:
+      type: string
+    qualification:
+      type: string
+    specialization:
+      type: string
+
+ClassRequest:
+  type: object
+  required:
+    - departmentId
+    - year
+  properties:
+    departmentId:
+      type: integer
+    year:
+      type: integer
+    section:
+      type: string
+    classSize:
+      type: integer
+    advisorId:
+      type: integer
+
+AttendanceRequest:
+  type: object
+  required:
+    - classId
+    - date
+    - studentAttendance
+  properties:
+    classId:
+      type: integer
+    date:
+      type: string
+      format: date
+    subjectId:
+      type: integer
+    studentAttendance:
+      type: object
+      additionalProperties:
+        type: string
+        enum: [PRESENT, ABSENT, LATE, LEAVE]
+
+MarksRequest:
+  type: object
+  required:
+    - subjectId
+    - semester
+    - marksType
+    - maxMarks
+    - studentMarks
+  properties:
+    subjectId:
+      type: integer
+    semester:
+      type: integer
+    marksType:
+      type: string
+      enum: [ASSESSMENT, PRACTICAL, SEMESTER]
+    maxMarks:
+      type: number
+    studentMarks:
+      type: object
+      additionalProperties:
+        type: number
+    academicYear:
+      type: string
+
+TimetableRequest:
+  type: object
+  required:
+    - classId
+    - subjectId
+    - teacherId
+    - dayOfWeek
+    - startTime
+    - endTime
+  properties:
+    classId:
+      type: integer
+    subjectId:
+      type: integer
+    teacherId:
+      type: integer
+    dayOfWeek:
+      type: string
+      enum: [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
+    startTime:
+      type: string
+      format: time
+    endTime:
+      type: string
+      format: time
+    roomNumber:
+      type: string
+
+LeaveRequest:
+  type: object
+  required:
+    - startDate
+    - endDate
+    - reason
+  properties:
+    startDate:
+      type: string
+      format: date
+    endDate:
+      type: string
+      format: date
+    reason:
+      type: string
+    documentUrl:
+      type: string
+
+OemBoardResponse:
+  type: object
+  properties:
+    subjectId:
+      type: integer
+    subjectName:
+      type: string
+    classId:
+      type: integer
+    entries:
+      type: array
+      items:
+        $ref: '#/components/schemas/OemBoardEntry'
+
+OemBoardEntry:
+  type: object
+  properties:
+    studentId:
+      type: integer
+    studentName:
+      type: string
+    rollNumber:
+      type: string
+    assessmentMarks:
+      type: number
+    practicalMarks:
+      type: number
+    semesterMarks:
+      type: number
+    totalMarks:
+      type: number
+
+WeeklyTimetableResponse:
+  type: object
+  properties:
+    classId:
+      type: integer
+    className:
+      type: string
+    timetable:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          $ref: '#/components/schemas/Timetable'

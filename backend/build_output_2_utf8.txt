@@ -1,0 +1,477 @@
+﻿[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.university:student-management-system:jar:1.0.0
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: org.testcontainers:testcontainers:jar -> duplicate declaration of version ${testcontainers.version} @ line 245, column 21
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] 
+[INFO] --------------< com.university:student-management-system >--------------
+[INFO] Building Student Management System 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- jacoco:0.8.10:prepare-agent (default) @ student-management-system ---
+[INFO] argLine set to "-javaagent:C:\\Users\\kirut\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.10\\org.jacoco.agent-0.8.10-runtime.jar=destfile=D:\\rajasabari\\student-management-system - Copy - Copy\\backend\\target\\jacoco.exec"
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ student-management-system ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 29 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ student-management-system ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 188 source files with javac [debug release 17] to target\classes
+[INFO] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/AIServiceClient.java: D:\rajasabari\student-management-system - Copy - Copy\backend\src\main\java\com\university\sms\service\AIServiceClient.java uses unchecked or unsafe operations.
+[INFO] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/AIServiceClient.java: Recompile with -Xlint:unchecked for details.
+[INFO] Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/LeaveServiceImpl.java:[57,56] cannot find symbol
+  symbol:   method findOverlappingLeaves(java.lang.Long,java.time.LocalDate,java.time.LocalDate)
+  location: variable leaveRepository of type com.university.sms.repository.LeaveRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/LeaveServiceImpl.java:[83,31] cannot find symbol
+  symbol:   method findByStudent(com.university.sms.model.Student,org.springframework.data.domain.Pageable)
+  location: variable leaveRepository of type com.university.sms.repository.LeaveRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/LeaveServiceImpl.java:[92,31] cannot find symbol
+  symbol:   method findByStudent(com.university.sms.model.Student)
+  location: variable leaveRepository of type com.university.sms.repository.LeaveRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/LeaveServiceImpl.java:[99,31] cannot find symbol
+  symbol:   method findByStatus(com.university.sms.model.enums.LeaveStatus)
+  location: variable leaveRepository of type com.university.sms.repository.LeaveRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/LeaveServiceImpl.java:[106,31] cannot find symbol
+  symbol:   method findByClassId(java.lang.Long)
+  location: variable leaveRepository of type com.university.sms.repository.LeaveRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/scheduler/AttendanceReminderScheduler.java:[91,51] cannot find symbol
+  symbol:   method findAllByIsClassAdvisorTrue()
+  location: variable teacherRepository of type com.university.sms.repository.TeacherRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DepartmentServiceImpl.java:[38,46] cannot find symbol
+  symbol:   method getEstablishedYear()
+  location: variable request of type com.university.sms.dto.request.DepartmentRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DepartmentServiceImpl.java:[57,46] cannot find symbol
+  symbol:   method getEstablishedYear()
+  location: variable request of type com.university.sms.dto.request.DepartmentRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DepartmentServiceImpl.java:[103,17] cannot find symbol
+  symbol:   method establishedYear(java.lang.Integer)
+  location: class com.university.sms.dto.response.DepartmentResponse.DepartmentResponseBuilder
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/MarksServiceImpl.java:[193,14] cannot find symbol
+  symbol:   class OemBoardEntry
+  location: class com.university.sms.service.impl.MarksServiceImpl
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/MarksServiceImpl.java:[196,21] cannot find symbol
+  symbol:   method findByStudentAndSubjectAndMarksType(com.university.sms.model.Student,com.university.sms.model.Subject,com.university.sms.model.enums.MarksType)
+  location: variable marksRepository of type com.university.sms.repository.MarksRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/MarksServiceImpl.java:[199,21] cannot find symbol
+  symbol:   method findByStudentAndSubjectAndMarksType(com.university.sms.model.Student,com.university.sms.model.Subject,com.university.sms.model.enums.MarksType)
+  location: variable marksRepository of type com.university.sms.repository.MarksRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/MarksServiceImpl.java:[202,21] cannot find symbol
+  symbol:   method findByStudentAndSubjectAndMarksType(com.university.sms.model.Student,com.university.sms.model.Subject,com.university.sms.model.enums.MarksType)
+  location: variable marksRepository of type com.university.sms.repository.MarksRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/MarksServiceImpl.java:[205,25] cannot find symbol
+  symbol:   variable OemBoardEntry
+  location: class com.university.sms.service.impl.MarksServiceImpl
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/MarksServiceImpl.java:[227,14] cannot find symbol
+  symbol:   class OemBoardEntry
+  location: class com.university.sms.service.impl.MarksServiceImpl
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DashboardServiceImpl.java:[12,16] constructor DashboardResponse in class com.university.sms.dto.response.DashboardResponse cannot be applied to given types;
+  required: long,long,long,double,java.util.Map<java.lang.String,java.lang.Long>,java.util.Map<java.lang.String,java.lang.Double>
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DashboardServiceImpl.java:[17,16] constructor DashboardResponse in class com.university.sms.dto.response.DashboardResponse cannot be applied to given types;
+  required: long,long,long,double,java.util.Map<java.lang.String,java.lang.Long>,java.util.Map<java.lang.String,java.lang.Double>
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DashboardServiceImpl.java:[22,16] constructor DashboardResponse in class com.university.sms.dto.response.DashboardResponse cannot be applied to given types;
+  required: long,long,long,double,java.util.Map<java.lang.String,java.lang.Long>,java.util.Map<java.lang.String,java.lang.Double>
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DashboardServiceImpl.java:[27,16] constructor DashboardResponse in class com.university.sms.dto.response.DashboardResponse cannot be applied to given types;
+  required: long,long,long,double,java.util.Map<java.lang.String,java.lang.Long>,java.util.Map<java.lang.String,java.lang.Double>
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DashboardServiceImpl.java:[32,16] constructor DashboardResponse in class com.university.sms.dto.response.DashboardResponse cannot be applied to given types;
+  required: long,long,long,double,java.util.Map<java.lang.String,java.lang.Long>,java.util.Map<java.lang.String,java.lang.Double>
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/NotificationServiceImpl.java:[44,45] incompatible types: java.lang.String cannot be converted to com.university.sms.model.enums.NotificationType
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/NotificationServiceImpl.java:[67,49] incompatible types: java.lang.String cannot be converted to com.university.sms.model.enums.NotificationType
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/NotificationServiceImpl.java:[139,34] incompatible types: java.lang.String cannot be converted to com.university.sms.model.enums.NotificationType
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/NotificationServiceImpl.java:[159,34] incompatible types: java.lang.String cannot be converted to com.university.sms.model.enums.NotificationType
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/NotificationServiceImpl.java:[177,34] incompatible types: java.lang.String cannot be converted to com.university.sms.model.enums.NotificationType
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/NotificationServiceImpl.java:[192,43] incompatible types: com.university.sms.model.enums.NotificationType cannot be converted to java.lang.String
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[40,47] cannot find symbol
+  symbol:   method getDate()
+  location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[56,67] cannot find symbol
+  symbol:   method getClassId()
+  location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[56,94] cannot find symbol
+  symbol:   method getDate()
+  location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[46,42] cannot find symbol
+  symbol:   method getTeacherId()
+  location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[51,64] cannot find symbol
+  symbol:   method getDate()
+  location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[52,42] cannot find symbol
+  symbol:   method getPresentCount()
+  location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[52,67] cannot find symbol
+  symbol:   method getAbsentCount()
+  location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[53,42] cannot find symbol
+  symbol:   method getLateCount()
+  location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[53,64] cannot find symbol
+  symbol:   method getLeaveCount()
+  location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[77,49] cannot find symbol
+  symbol:   method getStatus()
+  location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[91,58] cannot find symbol
+  symbol:   method getLeaveId()
+  location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[84,60] cannot find symbol
+  symbol:   method getStatus()
+  location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[87,42] cannot find symbol
+  symbol:   method getStartDate()
+  location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[87,64] cannot find symbol
+  symbol:   method getEndDate()
+  location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[88,42] cannot find symbol
+  symbol:   method getStatus()
+  location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[89,42] cannot find symbol
+  symbol:   method getDurationDays()
+  location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[89,67] cannot find symbol
+  symbol:   method getReason()
+  location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[93,26] cannot find symbol
+  symbol:   method getApproverId()
+  location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[97,26] cannot find symbol
+  symbol:   method getStudentEmail()
+  location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[99,26] cannot find symbol
+  symbol:   method getStatus()
+  location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[103,40] cannot find symbol
+  symbol:   method getStatus()
+  location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[132,30] cannot find symbol
+  symbol:   method getTeacherId()
+  location: variable event of type com.university.sms.events.MarksPublishedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[190,25] cannot find symbol
+  symbol:   method getHighestMarks()
+  location: variable event of type com.university.sms.events.MarksPublishedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[190,50] cannot find symbol
+  symbol:   method getLowestMarks()
+  location: variable event of type com.university.sms.events.MarksPublishedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/ClassServiceImpl.java:[119,19] cannot find symbol
+  symbol:   variable hodRepository
+  location: class com.university.sms.service.impl.ClassServiceImpl
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/ClassServiceImpl.java:[143,38] cannot find symbol
+  symbol:   method getSubjectIds()
+  location: variable request of type com.university.sms.dto.request.ClassSubjectRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/ClassServiceImpl.java:[151,24] cannot find symbol
+  symbol:   method getTeacherIds()
+  location: variable request of type com.university.sms.dto.request.ClassSubjectRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/ClassServiceImpl.java:[151,59] cannot find symbol
+  symbol:   method getTeacherIds()
+  location: variable request of type com.university.sms.dto.request.ClassSubjectRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/ClassServiceImpl.java:[152,69] cannot find symbol
+  symbol:   method getTeacherIds()
+  location: variable request of type com.university.sms.dto.request.ClassSubjectRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/ClassServiceImpl.java:[157,49] cannot find symbol
+  symbol:   method getAcademicYear()
+  location: variable request of type com.university.sms.dto.request.ClassSubjectRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/ClassServiceImpl.java:[158,45] cannot find symbol
+  symbol:   method getSemester()
+  location: variable request of type com.university.sms.dto.request.ClassSubjectRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/validator/TimetableConflictValidator.java:[73,37] incompatible types: java.lang.Long cannot be converted to com.university.sms.model.Teacher
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[51,47] cannot find symbol
+  symbol:   method createTeacher(@jakarta.validation.Valid com.university.sms.dto.request.TeacherRequest,java.lang.Long)
+  location: variable teacherService of type com.university.sms.service.TeacherService
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[58,53] cannot find symbol
+  symbol:   method getTeachersByDepartment(java.lang.Long)
+  location: variable teacherService of type com.university.sms.service.TeacherService
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[67,47] cannot find symbol
+  symbol:   method updateTeacher(java.lang.Long,@jakarta.validation.Valid com.university.sms.dto.request.TeacherRequest,java.lang.Long)
+  location: variable teacherService of type com.university.sms.service.TeacherService
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[75,23] method deleteTeacher in interface com.university.sms.service.TeacherService cannot be applied to given types;
+  required: java.lang.Long
+  found:    java.lang.Long,java.lang.Long
+  reason: actual and formal argument lists differ in length
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[142,49] cannot find symbol
+  symbol:   method getTeacherIds()
+  location: variable request of type @jakarta.validation.Valid com.university.sms.dto.request.AutoTimetableRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[142,24] cannot find symbol
+  symbol:   method getSubjectIds()
+  location: variable request of type @jakarta.validation.Valid com.university.sms.dto.request.AutoTimetableRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[141,55] cannot find symbol
+  symbol:   method getClassId()
+  location: variable request of type @jakarta.validation.Valid com.university.sms.dto.request.AutoTimetableRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[157,24] cannot find symbol
+  symbol:   method approveSemester(@jakarta.validation.Valid com.university.sms.dto.request.SemesterRequest,java.lang.Long)
+  location: variable semesterService of type com.university.sms.service.SemesterService
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/TimetableServiceImpl.java:[306,37] incompatible types: java.lang.Long cannot be converted to com.university.sms.model.Teacher
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/AnalyticsServiceImpl.java:[178,21] cannot find symbol
+  symbol:   method workloadPercentage(double)
+  location: class com.university.sms.dto.response.TeacherWorkloadResponse.TeacherWorkloadResponseBuilder
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/AnalyticsServiceImpl.java:[188,40] cannot find symbol
+  symbol:   class ResourceNotFoundException
+  location: class com.university.sms.service.impl.AnalyticsServiceImpl
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/TeacherController.java:[99,59] cannot find symbol
+  symbol:   method getMaterialsByTeacher(java.lang.Long)
+  location: variable materialService of type com.university.sms.service.MaterialService
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/TeacherController.java:[107,24] cannot find symbol
+  symbol:   method deleteMaterial(java.lang.Long,java.lang.Long)
+  location: variable materialService of type com.university.sms.service.MaterialService
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/TeacherController.java:[114,61] cannot find symbol
+  symbol:   method getAssignedClasses(java.lang.Long)
+  location: variable teacherService of type com.university.sms.service.TeacherService
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/UserServiceImpl.java:[138,34] cannot find symbol
+  symbol:   method getOfficeRoom()
+  location: variable request of type com.university.sms.dto.request.HodRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/UserServiceImpl.java:[152,34] cannot find symbol
+  symbol:   method getOfficeRoom()
+  location: variable request of type com.university.sms.dto.request.HodRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/UserServiceImpl.java:[195,17] cannot find symbol
+  symbol:   method emailVerified(java.lang.Boolean)
+  location: class com.university.sms.dto.response.UserResponse.UserResponseBuilder
+[INFO] 75 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  16.858 s
+[INFO] Finished at: 2026-03-23T01:16:51+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project student-management-system: Compilation failure: Compilation failure: 
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/LeaveServiceImpl.java:[57,56] cannot find symbol
+[ERROR]   symbol:   method findOverlappingLeaves(java.lang.Long,java.time.LocalDate,java.time.LocalDate)
+[ERROR]   location: variable leaveRepository of type com.university.sms.repository.LeaveRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/LeaveServiceImpl.java:[83,31] cannot find symbol
+[ERROR]   symbol:   method findByStudent(com.university.sms.model.Student,org.springframework.data.domain.Pageable)
+[ERROR]   location: variable leaveRepository of type com.university.sms.repository.LeaveRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/LeaveServiceImpl.java:[92,31] cannot find symbol
+[ERROR]   symbol:   method findByStudent(com.university.sms.model.Student)
+[ERROR]   location: variable leaveRepository of type com.university.sms.repository.LeaveRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/LeaveServiceImpl.java:[99,31] cannot find symbol
+[ERROR]   symbol:   method findByStatus(com.university.sms.model.enums.LeaveStatus)
+[ERROR]   location: variable leaveRepository of type com.university.sms.repository.LeaveRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/LeaveServiceImpl.java:[106,31] cannot find symbol
+[ERROR]   symbol:   method findByClassId(java.lang.Long)
+[ERROR]   location: variable leaveRepository of type com.university.sms.repository.LeaveRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/scheduler/AttendanceReminderScheduler.java:[91,51] cannot find symbol
+[ERROR]   symbol:   method findAllByIsClassAdvisorTrue()
+[ERROR]   location: variable teacherRepository of type com.university.sms.repository.TeacherRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DepartmentServiceImpl.java:[38,46] cannot find symbol
+[ERROR]   symbol:   method getEstablishedYear()
+[ERROR]   location: variable request of type com.university.sms.dto.request.DepartmentRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DepartmentServiceImpl.java:[57,46] cannot find symbol
+[ERROR]   symbol:   method getEstablishedYear()
+[ERROR]   location: variable request of type com.university.sms.dto.request.DepartmentRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DepartmentServiceImpl.java:[103,17] cannot find symbol
+[ERROR]   symbol:   method establishedYear(java.lang.Integer)
+[ERROR]   location: class com.university.sms.dto.response.DepartmentResponse.DepartmentResponseBuilder
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/MarksServiceImpl.java:[193,14] cannot find symbol
+[ERROR]   symbol:   class OemBoardEntry
+[ERROR]   location: class com.university.sms.service.impl.MarksServiceImpl
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/MarksServiceImpl.java:[196,21] cannot find symbol
+[ERROR]   symbol:   method findByStudentAndSubjectAndMarksType(com.university.sms.model.Student,com.university.sms.model.Subject,com.university.sms.model.enums.MarksType)
+[ERROR]   location: variable marksRepository of type com.university.sms.repository.MarksRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/MarksServiceImpl.java:[199,21] cannot find symbol
+[ERROR]   symbol:   method findByStudentAndSubjectAndMarksType(com.university.sms.model.Student,com.university.sms.model.Subject,com.university.sms.model.enums.MarksType)
+[ERROR]   location: variable marksRepository of type com.university.sms.repository.MarksRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/MarksServiceImpl.java:[202,21] cannot find symbol
+[ERROR]   symbol:   method findByStudentAndSubjectAndMarksType(com.university.sms.model.Student,com.university.sms.model.Subject,com.university.sms.model.enums.MarksType)
+[ERROR]   location: variable marksRepository of type com.university.sms.repository.MarksRepository
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/MarksServiceImpl.java:[205,25] cannot find symbol
+[ERROR]   symbol:   variable OemBoardEntry
+[ERROR]   location: class com.university.sms.service.impl.MarksServiceImpl
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/MarksServiceImpl.java:[227,14] cannot find symbol
+[ERROR]   symbol:   class OemBoardEntry
+[ERROR]   location: class com.university.sms.service.impl.MarksServiceImpl
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DashboardServiceImpl.java:[12,16] constructor DashboardResponse in class com.university.sms.dto.response.DashboardResponse cannot be applied to given types;
+[ERROR]   required: long,long,long,double,java.util.Map<java.lang.String,java.lang.Long>,java.util.Map<java.lang.String,java.lang.Double>
+[ERROR]   found:    no arguments
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DashboardServiceImpl.java:[17,16] constructor DashboardResponse in class com.university.sms.dto.response.DashboardResponse cannot be applied to given types;
+[ERROR]   required: long,long,long,double,java.util.Map<java.lang.String,java.lang.Long>,java.util.Map<java.lang.String,java.lang.Double>
+[ERROR]   found:    no arguments
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DashboardServiceImpl.java:[22,16] constructor DashboardResponse in class com.university.sms.dto.response.DashboardResponse cannot be applied to given types;
+[ERROR]   required: long,long,long,double,java.util.Map<java.lang.String,java.lang.Long>,java.util.Map<java.lang.String,java.lang.Double>
+[ERROR]   found:    no arguments
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DashboardServiceImpl.java:[27,16] constructor DashboardResponse in class com.university.sms.dto.response.DashboardResponse cannot be applied to given types;
+[ERROR]   required: long,long,long,double,java.util.Map<java.lang.String,java.lang.Long>,java.util.Map<java.lang.String,java.lang.Double>
+[ERROR]   found:    no arguments
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/DashboardServiceImpl.java:[32,16] constructor DashboardResponse in class com.university.sms.dto.response.DashboardResponse cannot be applied to given types;
+[ERROR]   required: long,long,long,double,java.util.Map<java.lang.String,java.lang.Long>,java.util.Map<java.lang.String,java.lang.Double>
+[ERROR]   found:    no arguments
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/NotificationServiceImpl.java:[44,45] incompatible types: java.lang.String cannot be converted to com.university.sms.model.enums.NotificationType
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/NotificationServiceImpl.java:[67,49] incompatible types: java.lang.String cannot be converted to com.university.sms.model.enums.NotificationType
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/NotificationServiceImpl.java:[139,34] incompatible types: java.lang.String cannot be converted to com.university.sms.model.enums.NotificationType
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/NotificationServiceImpl.java:[159,34] incompatible types: java.lang.String cannot be converted to com.university.sms.model.enums.NotificationType
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/NotificationServiceImpl.java:[177,34] incompatible types: java.lang.String cannot be converted to com.university.sms.model.enums.NotificationType
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/NotificationServiceImpl.java:[192,43] incompatible types: com.university.sms.model.enums.NotificationType cannot be converted to java.lang.String
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[40,47] cannot find symbol
+[ERROR]   symbol:   method getDate()
+[ERROR]   location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[56,67] cannot find symbol
+[ERROR]   symbol:   method getClassId()
+[ERROR]   location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[56,94] cannot find symbol
+[ERROR]   symbol:   method getDate()
+[ERROR]   location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[46,42] cannot find symbol
+[ERROR]   symbol:   method getTeacherId()
+[ERROR]   location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[51,64] cannot find symbol
+[ERROR]   symbol:   method getDate()
+[ERROR]   location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[52,42] cannot find symbol
+[ERROR]   symbol:   method getPresentCount()
+[ERROR]   location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[52,67] cannot find symbol
+[ERROR]   symbol:   method getAbsentCount()
+[ERROR]   location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[53,42] cannot find symbol
+[ERROR]   symbol:   method getLateCount()
+[ERROR]   location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[53,64] cannot find symbol
+[ERROR]   symbol:   method getLeaveCount()
+[ERROR]   location: variable event of type com.university.sms.events.AttendanceSubmittedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[77,49] cannot find symbol
+[ERROR]   symbol:   method getStatus()
+[ERROR]   location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[91,58] cannot find symbol
+[ERROR]   symbol:   method getLeaveId()
+[ERROR]   location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[84,60] cannot find symbol
+[ERROR]   symbol:   method getStatus()
+[ERROR]   location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[87,42] cannot find symbol
+[ERROR]   symbol:   method getStartDate()
+[ERROR]   location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[87,64] cannot find symbol
+[ERROR]   symbol:   method getEndDate()
+[ERROR]   location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[88,42] cannot find symbol
+[ERROR]   symbol:   method getStatus()
+[ERROR]   location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[89,42] cannot find symbol
+[ERROR]   symbol:   method getDurationDays()
+[ERROR]   location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[89,67] cannot find symbol
+[ERROR]   symbol:   method getReason()
+[ERROR]   location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[93,26] cannot find symbol
+[ERROR]   symbol:   method getApproverId()
+[ERROR]   location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[97,26] cannot find symbol
+[ERROR]   symbol:   method getStudentEmail()
+[ERROR]   location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[99,26] cannot find symbol
+[ERROR]   symbol:   method getStatus()
+[ERROR]   location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[103,40] cannot find symbol
+[ERROR]   symbol:   method getStatus()
+[ERROR]   location: variable event of type com.university.sms.events.LeaveApprovedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[132,30] cannot find symbol
+[ERROR]   symbol:   method getTeacherId()
+[ERROR]   location: variable event of type com.university.sms.events.MarksPublishedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[190,25] cannot find symbol
+[ERROR]   symbol:   method getHighestMarks()
+[ERROR]   location: variable event of type com.university.sms.events.MarksPublishedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/events/listeners/NotificationEventListener.java:[190,50] cannot find symbol
+[ERROR]   symbol:   method getLowestMarks()
+[ERROR]   location: variable event of type com.university.sms.events.MarksPublishedEvent
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/ClassServiceImpl.java:[119,19] cannot find symbol
+[ERROR]   symbol:   variable hodRepository
+[ERROR]   location: class com.university.sms.service.impl.ClassServiceImpl
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/ClassServiceImpl.java:[143,38] cannot find symbol
+[ERROR]   symbol:   method getSubjectIds()
+[ERROR]   location: variable request of type com.university.sms.dto.request.ClassSubjectRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/ClassServiceImpl.java:[151,24] cannot find symbol
+[ERROR]   symbol:   method getTeacherIds()
+[ERROR]   location: variable request of type com.university.sms.dto.request.ClassSubjectRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/ClassServiceImpl.java:[151,59] cannot find symbol
+[ERROR]   symbol:   method getTeacherIds()
+[ERROR]   location: variable request of type com.university.sms.dto.request.ClassSubjectRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/ClassServiceImpl.java:[152,69] cannot find symbol
+[ERROR]   symbol:   method getTeacherIds()
+[ERROR]   location: variable request of type com.university.sms.dto.request.ClassSubjectRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/ClassServiceImpl.java:[157,49] cannot find symbol
+[ERROR]   symbol:   method getAcademicYear()
+[ERROR]   location: variable request of type com.university.sms.dto.request.ClassSubjectRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/ClassServiceImpl.java:[158,45] cannot find symbol
+[ERROR]   symbol:   method getSemester()
+[ERROR]   location: variable request of type com.university.sms.dto.request.ClassSubjectRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/validator/TimetableConflictValidator.java:[73,37] incompatible types: java.lang.Long cannot be converted to com.university.sms.model.Teacher
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[51,47] cannot find symbol
+[ERROR]   symbol:   method createTeacher(@jakarta.validation.Valid com.university.sms.dto.request.TeacherRequest,java.lang.Long)
+[ERROR]   location: variable teacherService of type com.university.sms.service.TeacherService
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[58,53] cannot find symbol
+[ERROR]   symbol:   method getTeachersByDepartment(java.lang.Long)
+[ERROR]   location: variable teacherService of type com.university.sms.service.TeacherService
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[67,47] cannot find symbol
+[ERROR]   symbol:   method updateTeacher(java.lang.Long,@jakarta.validation.Valid com.university.sms.dto.request.TeacherRequest,java.lang.Long)
+[ERROR]   location: variable teacherService of type com.university.sms.service.TeacherService
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[75,23] method deleteTeacher in interface com.university.sms.service.TeacherService cannot be applied to given types;
+[ERROR]   required: java.lang.Long
+[ERROR]   found:    java.lang.Long,java.lang.Long
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[142,49] cannot find symbol
+[ERROR]   symbol:   method getTeacherIds()
+[ERROR]   location: variable request of type @jakarta.validation.Valid com.university.sms.dto.request.AutoTimetableRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[142,24] cannot find symbol
+[ERROR]   symbol:   method getSubjectIds()
+[ERROR]   location: variable request of type @jakarta.validation.Valid com.university.sms.dto.request.AutoTimetableRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[141,55] cannot find symbol
+[ERROR]   symbol:   method getClassId()
+[ERROR]   location: variable request of type @jakarta.validation.Valid com.university.sms.dto.request.AutoTimetableRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/HodController.java:[157,24] cannot find symbol
+[ERROR]   symbol:   method approveSemester(@jakarta.validation.Valid com.university.sms.dto.request.SemesterRequest,java.lang.Long)
+[ERROR]   location: variable semesterService of type com.university.sms.service.SemesterService
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/TimetableServiceImpl.java:[306,37] incompatible types: java.lang.Long cannot be converted to com.university.sms.model.Teacher
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/AnalyticsServiceImpl.java:[178,21] cannot find symbol
+[ERROR]   symbol:   method workloadPercentage(double)
+[ERROR]   location: class com.university.sms.dto.response.TeacherWorkloadResponse.TeacherWorkloadResponseBuilder
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/AnalyticsServiceImpl.java:[188,40] cannot find symbol
+[ERROR]   symbol:   class ResourceNotFoundException
+[ERROR]   location: class com.university.sms.service.impl.AnalyticsServiceImpl
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/TeacherController.java:[99,59] cannot find symbol
+[ERROR]   symbol:   method getMaterialsByTeacher(java.lang.Long)
+[ERROR]   location: variable materialService of type com.university.sms.service.MaterialService
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/TeacherController.java:[107,24] cannot find symbol
+[ERROR]   symbol:   method deleteMaterial(java.lang.Long,java.lang.Long)
+[ERROR]   location: variable materialService of type com.university.sms.service.MaterialService
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/controller/TeacherController.java:[114,61] cannot find symbol
+[ERROR]   symbol:   method getAssignedClasses(java.lang.Long)
+[ERROR]   location: variable teacherService of type com.university.sms.service.TeacherService
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/UserServiceImpl.java:[138,34] cannot find symbol
+[ERROR]   symbol:   method getOfficeRoom()
+[ERROR]   location: variable request of type com.university.sms.dto.request.HodRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/UserServiceImpl.java:[152,34] cannot find symbol
+[ERROR]   symbol:   method getOfficeRoom()
+[ERROR]   location: variable request of type com.university.sms.dto.request.HodRequest
+[ERROR] /D:/rajasabari/student-management-system - Copy - Copy/backend/src/main/java/com/university/sms/service/impl/UserServiceImpl.java:[195,17] cannot find symbol
+[ERROR]   symbol:   method emailVerified(java.lang.Boolean)
+[ERROR]   location: class com.university.sms.dto.response.UserResponse.UserResponseBuilder
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

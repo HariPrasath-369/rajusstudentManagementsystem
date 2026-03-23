@@ -1,0 +1,12 @@
+
+> student-management-frontend@1.0.0 build
+> react-scripts build
+
+(node:12080) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Creating an optimized production build...
+Failed to compile.
+
+Module not found: Error: Can't resolve '../../hooks/useNotification' in 'D:\rajasabari\student-management-system - Copy - Copy\frontend\src\components\Layout'
+
+
