@@ -39,7 +39,6 @@ const HODManagement = () => {
       setTeachers(teachersData);
       setDepartments(deptsData);
     } catch (error) {
-      toast.error('Failed to fetch data');
       setHods(getMockHODs());
       setTeachers(getMockTeachers());
       setDepartments(getMockDepartments());

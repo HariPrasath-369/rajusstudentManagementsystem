@@ -153,7 +153,6 @@ const OEMBoard = () => {
       }
     }
   };
- Lively
 
   const calculateTotal = (studentId) => {
     const data = oemData[studentId];

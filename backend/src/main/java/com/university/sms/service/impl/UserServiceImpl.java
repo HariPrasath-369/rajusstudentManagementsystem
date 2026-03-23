@@ -185,8 +185,15 @@ public class UserServiceImpl implements UserService {
         return mapToUserResponse(user);
     }
 
+    @Override
+    public List<UserResponse> getAvailableTeachers() {
+        return userRepository.findByRoleAndIsActiveTrue(Role.ROLE_TEACHER).stream()
+                .map(this::mapToUserResponse)
+                .collect(Collectors.toList());
+    }
+
     private UserResponse mapToUserResponse(User user) {
-        return UserResponse.builder()
+        UserResponse.UserResponseBuilder builder = UserResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
@@ -196,7 +203,15 @@ public class UserServiceImpl implements UserService {
                 .phoneNumber(user.getPhoneNumber())
                 .profilePicture(user.getProfilePicture())
                 .createdAt(user.getCreatedAt())
-                .lastLogin(user.getLastLogin())
-                .build();
+                .lastLogin(user.getLastLogin());
+
+        if (user.getRole() == Role.ROLE_TEACHER || user.getRole() == Role.ROLE_HOD || user.getRole() == Role.ROLE_CA) {
+            teacherRepository.findByUserId(user.getId()).ifPresent(teacher -> {
+                if (teacher.getDepartment() != null) {
+                    builder.department(teacher.getDepartment().getName());
+                }
+            });
+        }
+        return builder.build();
     }
 }

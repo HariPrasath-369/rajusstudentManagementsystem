@@ -50,4 +50,7 @@ public interface TimetableRepository extends JpaRepository<Timetable, Long> {
 
     @Query("SELECT t FROM Timetable t WHERE t.classEntity.id = :classId ORDER BY t.dayOfWeek, t.startTime")
     List<Timetable> findByClassIdOrdered(@Param("classId") Long classId);
+
+    @Query("SELECT t FROM Timetable t WHERE t.classEntity.department.id = :deptId")
+    List<Timetable> findByDepartmentId(@Param("deptId") Long deptId);
 }

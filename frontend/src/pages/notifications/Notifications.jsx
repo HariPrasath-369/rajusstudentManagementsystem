@@ -54,7 +54,8 @@ const Notifications = () => {
     try {
       setLoading(true);
       const data = await notificationService.getNotifications();
-      setNotifications(data);
+      const notificationsList = data?.content || data?.data || data || [];
+      setNotifications(Array.isArray(notificationsList) ? notificationsList : []);
     } catch (error) {
       console.error('Failed to fetch notifications:', error);
       toast.error('Failed to load notifications');

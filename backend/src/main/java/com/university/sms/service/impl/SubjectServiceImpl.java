@@ -25,4 +25,9 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Subject not found"));
     }
+
+    @Override
+    public List<Subject> getSubjectsByDepartment(Long deptId) {
+        return subjectRepository.findActiveByDepartmentId(deptId);
+    }
 }

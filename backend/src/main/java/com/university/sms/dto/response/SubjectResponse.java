@@ -13,4 +13,8 @@ public class SubjectResponse {
     private Long id;
     private String name;
     private String code;
+    private Integer creditHours;
+    private String type;
+    private Integer semester;
+    private Long departmentId;
 }

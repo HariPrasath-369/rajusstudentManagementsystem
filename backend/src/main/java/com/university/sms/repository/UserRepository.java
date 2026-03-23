@@ -24,9 +24,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByRole(Role role);
 
-    Page<User> findByRole(Role role, Pageable pageable);
+    List<User> findByRole(Role role, Pageable pageable);
 
     List<User> findAllByIsActiveTrue();
+
+    List<User> findByRoleAndIsActiveTrue(Role role);
 
     @Query("SELECT u FROM User u WHERE u.isActive = true AND u.emailVerified = true")
     List<User> findAllActiveUsers();

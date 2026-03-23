@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Check, X, Clock, QrCode, Download, Calendar, Users, AlertCircle, Save, Eye, Smartphone } from 'lucide-react';
+import { Check, X, Clock, QrCode, Download, Calendar, Users, AlertCircle, Save, Eye, Smartphone, CheckCircle } from 'lucide-react';
 import Card from '../../components/Common/Card';
 import Button from '../../components/Common/Button';
 import Modal from '../../components/Common/Modal';

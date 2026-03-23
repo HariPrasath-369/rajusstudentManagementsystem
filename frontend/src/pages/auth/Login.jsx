@@ -204,6 +204,18 @@ const Login = () => {
                 )}
               </motion.button>
             </form>
+            
+            <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700/50">
+              <p className="text-center text-sm font-medium text-slate-500 dark:text-slate-400">
+                Don't have an account?{' '}
+                <Link
+                  to="/register"
+                  className="font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+                >
+                  Create an account
+                </Link>
+              </p>
+            </div>
           </div>
         </motion.div>
       </div>

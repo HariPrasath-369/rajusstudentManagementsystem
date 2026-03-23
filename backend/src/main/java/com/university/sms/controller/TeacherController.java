@@ -108,8 +108,14 @@ public class TeacherController {
 
     @GetMapping("/materials")
     @Operation(summary = "Get uploaded materials")
-    public ResponseEntity<List<MaterialResponse>> getMaterials(@CurrentUser UserPrincipal currentUser) {
-        List<MaterialResponse> materials = materialService.getMaterialsByTeacher(currentUser.getId());
+    public ResponseEntity<List<MaterialResponse>> getMaterials(@CurrentUser UserPrincipal currentUser,
+                                                                @RequestParam(required = false) Long subjectId) {
+        List<MaterialResponse> materials;
+        if (subjectId != null) {
+            materials = materialService.getMaterialsByTeacherAndSubject(currentUser.getId(), subjectId);
+        } else {
+            materials = materialService.getMaterialsByTeacher(currentUser.getId());
+        }
         return ResponseEntity.ok(materials);
     }
 

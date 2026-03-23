@@ -131,16 +131,17 @@ const MyMarks = () => {
         </div>
       </div>
 
-      {/* CGPA Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card className="text-center bg-gradient-to-r from-primary-600 to-primary-700 text-white">
           <Award className="h-12 w-12 mx-auto mb-3" />
-          <p className="text-4xl font-bold">{marksData.cgpa}</p>
+          <p className="text-4xl font-bold">{typeof marksData.cgpa === 'number' ? marksData.cgpa.toFixed(2) : 'N/A'}</p>
           <p className="text-primary-100 mt-1">Cumulative GPA</p>
         </Card>
         <Card className="text-center">
           <TrendingUp className="h-12 w-12 mx-auto mb-3 text-primary-600" />
-          <p className="text-4xl font-bold">{marksData.sgpa[selectedSemester - 1] || marksData.sgpa[0]}</p>
+          <p className="text-4xl font-bold">
+            {marksData.sgpa?.find(s => s.semester === selectedSemester)?.gpa?.toFixed(2) || 'N/A'}
+          </p>
           <p className="text-gray-500 mt-1">SGPA - Semester {selectedSemester}</p>
         </Card>
       </div>

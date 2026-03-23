@@ -41,8 +41,8 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional
-    public MaterialResponse uploadMaterial(MaterialRequest request, Long teacherId) {
-        Teacher teacher = teacherRepository.findById(teacherId)
+    public MaterialResponse uploadMaterial(MaterialRequest request, Long userId) {
+        Teacher teacher = teacherRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Teacher not found"));
 
         Subject subject = subjectRepository.findById(request.getSubjectId())
@@ -80,8 +80,19 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public List<MaterialResponse> getMaterialsByTeacher(Long teacherId) {
-        return materialRepository.findByTeacherIdOrderByUploadedAtDesc(teacherId).stream()
+    public List<MaterialResponse> getMaterialsByTeacher(Long userId) {
+        Teacher teacher = teacherRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Teacher not found"));
+        return materialRepository.findByTeacherIdOrderByUploadedAtDesc(teacher.getId()).stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MaterialResponse> getMaterialsByTeacherAndSubject(Long userId, Long subjectId) {
+        Teacher teacher = teacherRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Teacher not found"));
+        return materialRepository.findByTeacherIdAndSubjectIdOrderByUploadedAtDesc(teacher.getId(), subjectId).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
@@ -100,14 +111,21 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     private MaterialResponse mapToResponse(Material material) {
+        if (material == null) return null;
+        
+        String uploaderName = "Unknown";
+        if (material.getTeacher() != null && material.getTeacher().getUser() != null) {
+            uploaderName = material.getTeacher().getUser().getName();
+        }
+
         return MaterialResponse.builder()
                 .id(material.getId())
-                .title(material.getTitle())
-                .description(material.getDescription())
-                .teacherName(material.getTeacher().getUser().getName())
-                .subjectName(material.getSubject().getName())
-                .className(material.getStudentClass().getClassName())
-                .uploaderName(material.getTeacher().getUser().getName())
+                .title(material.getTitle() != null ? material.getTitle() : "Untitled")
+                .description(material.getDescription() != null ? material.getDescription() : "")
+                .teacherName(uploaderName)
+                .subjectName(material.getSubject() != null ? material.getSubject().getName() : "N/A")
+                .className(material.getStudentClass() != null ? material.getStudentClass().getClassName() : "N/A")
+                .uploaderName(uploaderName)
                 .fileUrl(material.getFileUrl())
                 .fileType(material.getFileType())
                 .createdAt(material.getUploadedAt())

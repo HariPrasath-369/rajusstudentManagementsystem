@@ -9,5 +9,6 @@ public interface MaterialService {
     List<MaterialResponse> getMaterialsBySubject(Long subjectId);
     List<MaterialResponse> getMaterialsByClass(Long classId);
     List<MaterialResponse> getMaterialsByTeacher(Long teacherId);
+    List<MaterialResponse> getMaterialsByTeacherAndSubject(Long teacherId, Long subjectId);
     void deleteMaterial(Long id, Long teacherId);
 }

@@ -39,25 +39,25 @@ public interface MarksRepository extends JpaRepository<Marks, Long> {
     Double getAverageMarksByStudent(@Param("studentId") Long studentId);
 
     @Query("SELECT AVG(m.marksObtained / m.maxMarks * 100) FROM Marks m WHERE m.enteredBy = :teacherId")
-    double getAverageMarksByTeacher(@Param("teacherId") Long teacherId);
+    Double getAverageMarksByTeacher(@Param("teacherId") Long teacherId);
 
     @Query("SELECT AVG(m.marksObtained / m.maxMarks * 100) FROM Marks m " +
            "WHERE m.subject.department.id = :deptId")
-    double getAverageMarksByDepartment(@Param("deptId") Long deptId);
+    Double getAverageMarksByDepartment(@Param("deptId") Long deptId);
 
     @Query("SELECT AVG(m.marksObtained / m.maxMarks * 100) FROM Marks m")
-    double getAverageMarksOverall();
+    Double getAverageMarksOverall();
 
     @Query("SELECT AVG(m.marksObtained / m.maxMarks * 100) FROM Marks m WHERE m.student.id = :studentId AND m.semester = :semester")
-    double getAverageMarksByStudentAndSemester(@Param("studentId") Long studentId, @Param("semester") Integer semester);
+    Double getAverageMarksByStudentAndSemester(@Param("studentId") Long studentId, @Param("semester") Integer semester);
 
     @Query("SELECT d.name, AVG(m.marksObtained / m.maxMarks * 100) FROM Marks m " +
            "JOIN m.subject s JOIN s.department d GROUP BY d.name")
     List<Object[]> getPassPercentageByDepartment();
 
-    @Query("SELECT COUNT(CASE WHEN (m.marksObtained / m.maxMarks * 100) >= 40 THEN 1 END) * 100.0 / COUNT(m) " +
+    @Query("SELECT COUNT(CASE WHEN (m.marksObtained / m.maxMarks * 100) >= 40 THEN 1 END) * 100.0 / NULLIF(COUNT(m), 0) " +
            "FROM Marks m WHERE m.subject.department.id = :deptId")
-    double getPassRateByDepartment(@Param("deptId") Long deptId);
+    Double getPassRateByDepartment(@Param("deptId") Long deptId);
 
     @Modifying
     @Transactional

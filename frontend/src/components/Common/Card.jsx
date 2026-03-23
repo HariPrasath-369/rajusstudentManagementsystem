@@ -11,6 +11,7 @@ const Card = ({
   loading = false,
   className = '',
   onClick,
+  headerAction, // Destructure to avoid passing to DOM
   ...props
 }) => {
   const baseClasses = `

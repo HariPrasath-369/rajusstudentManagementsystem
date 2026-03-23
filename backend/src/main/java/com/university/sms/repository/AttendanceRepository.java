@@ -59,18 +59,18 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
                                                      @Param("endDate") LocalDate endDate);
 
     @Query("SELECT AVG(CASE WHEN a.status = 'PRESENT' THEN 1.0 ELSE 0.0 END) FROM Attendance a")
-    double getAverageAttendanceOverall();
+    Double getAverageAttendanceOverall();
 
     @Query("SELECT AVG(CASE WHEN a.status = 'PRESENT' THEN 1.0 ELSE 0.0 END) FROM Attendance a WHERE a.submittedBy = :teacherId")
-    double getAverageAttendanceByTeacher(@Param("teacherId") Long teacherId);
+    Double getAverageAttendanceByTeacher(@Param("teacherId") Long teacherId);
 
     @Query("SELECT AVG(CASE WHEN a.status = 'PRESENT' THEN 1.0 ELSE 0.0 END) FROM Attendance a " +
            "WHERE a.classEntity.department.id = :deptId")
-    double getAverageAttendanceByDepartment(@Param("deptId") Long deptId);
+    Double getAverageAttendanceByDepartment(@Param("deptId") Long deptId);
 
-    @Query("SELECT (COUNT(CASE WHEN a.status = 'PRESENT' THEN 1 END) * 100.0 / COUNT(a)) " +
+    @Query("SELECT (COUNT(CASE WHEN a.status = 'PRESENT' THEN 1 END) * 100.0 / NULLIF(COUNT(a), 0)) " +
            "FROM Attendance a WHERE a.student.id = :studentId")
-    double getAttendancePercentage(@Param("studentId") Long studentId);
+    Double getAttendancePercentage(@Param("studentId") Long studentId);
 
     @Query("SELECT AVG(CASE WHEN a.status = 'PRESENT' THEN 1.0 ELSE 0.0 END) FROM Attendance a WHERE a.student.id = :studentId")
     Double getAverageAttendanceByStudent(@Param("studentId") Long studentId);

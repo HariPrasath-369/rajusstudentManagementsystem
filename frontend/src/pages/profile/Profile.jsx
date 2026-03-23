@@ -26,6 +26,7 @@ import {
 import Card from '../../components/Common/Card';
 import Button from '../../components/Common/Button';
 import { userService } from '../../services/userService';
+import { hodService } from '../../services/hodService';
 import { useAuth } from '../../hooks/useAuth';
 import toast from 'react-hot-toast';
 
@@ -55,9 +56,23 @@ const Profile = () => {
     lastLogin: ''
   });
 
+  const [deptStats, setDeptStats] = useState(null);
+
   useEffect(() => {
     fetchProfile();
-  }, []);
+    if (user?.role === 'ROLE_HOD') {
+      fetchDeptStats();
+    }
+  }, [user]);
+
+  const fetchDeptStats = async () => {
+    try {
+      const data = await hodService.getDashboard();
+      setDeptStats(data.stats);
+    } catch (error) {
+      console.error('Failed to fetch dept stats:', error);
+    }
+  };
 
   const fetchProfile = async () => {
     try {
@@ -254,10 +269,33 @@ const Profile = () => {
         {/* HOD Information */}
         {profileData.role === 'ROLE_HOD' && (
           <Section title="HOD Information" icon={Building2}>
-            <div className="space-y-2">
-              <InfoRow icon={Building2} label="Department" value={profileData.department} />
-              <InfoRow icon={Calendar} label="Appointment Date" value={profileData.joiningDate} />
-              <InfoRow icon={MapPin} label="Office Room" value={profileData.officeRoom} />
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <InfoRow icon={Building2} label="Department" value={profileData.department} />
+                <InfoRow icon={Calendar} label="Appointment Date" value={profileData.joiningDate} />
+                <InfoRow icon={MapPin} label="Office Room" value={profileData.officeRoom} />
+                <InfoRow icon={Shield} label="Authority Level" value="Department Head" />
+              </div>
+              
+              {deptStats && (
+                <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Department Overview</h3>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="bg-primary-50 dark:bg-primary-900/10 p-4 rounded-2xl text-center">
+                      <p className="text-2xl font-bold text-primary-600">{deptStats.totalTeachers || 0}</p>
+                      <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Teachers</p>
+                    </div>
+                    <div className="bg-green-50 dark:bg-green-900/10 p-4 rounded-2xl text-center">
+                      <p className="text-2xl font-bold text-green-600">{deptStats.totalClasses || 0}</p>
+                      <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Classes</p>
+                    </div>
+                    <div className="bg-purple-50 dark:bg-purple-900/10 p-4 rounded-2xl text-center">
+                      <p className="text-2xl font-bold text-purple-600">{deptStats.totalStudents || 0}</p>
+                      <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Students</p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </Section>
         )}

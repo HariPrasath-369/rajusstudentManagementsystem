@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Calendar, Plus, Edit, Trash2, Clock, AlertCircle, RefreshCw, Download } from 'lucide-react';
 import Card from '../../components/Common/Card';
 import Button from '../../components/Common/Button';
 import Modal from '../../components/Common/Modal';
 import Select from '../../components/Forms/Select';
+import Input from '../../components/Forms/Input';
 import TimePicker from '../../components/Forms/TimePicker';
 import { hodService } from '../../services/hodService';
 import toast from 'react-hot-toast';
@@ -31,9 +33,19 @@ const Timetable = () => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const timeSlots = ['9:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00'];
 
+  const location = useLocation();
+
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (location.pathname === '/hod/timetable/generate') {
+      // Could trigger generate logic or just select a class first
+    } else if (location.pathname === '/hod/timetable/conflicts') {
+      // Conflicts are already shown in the alert if they exist
+    }
+  }, [location.pathname]);
 
   const fetchData = async () => {
     try {
@@ -50,7 +62,6 @@ const Timetable = () => {
       setTeachers(teachersData);
       checkConflicts(timetableData);
     } catch (error) {
-      toast.error('Failed to fetch timetable data');
       setTimetable(getMockTimetable());
       setClasses(getMockClasses());
       setSubjects(getMockSubjects());

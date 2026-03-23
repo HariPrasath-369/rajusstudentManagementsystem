@@ -5,7 +5,11 @@ import com.university.sms.repository.*;
 import com.university.sms.service.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.university.sms.model.Hod;
+import com.university.sms.model.Teacher;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DashboardServiceImpl implements DashboardService {
@@ -21,6 +25,21 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Autowired
     private AttendanceRepository attendanceRepository;
+
+    @Autowired
+    private HodRepository hodRepository;
+
+    @Autowired
+    private ClassRepository classRepository;
+
+    @Autowired
+    private SubjectRepository subjectRepository;
+
+    @Autowired
+    private TimetableRepository timetableRepository;
+
+    @Autowired
+    private LeaveRepository leaveRepository;
 
     @Override
     public DashboardResponse getStudentDashboard(Long userId) {
@@ -88,82 +107,122 @@ public class DashboardServiceImpl implements DashboardService {
                     Map.of("name", "ECE", "students", 100, "teachers", 12, "passRate", 85)
                 ))
                 .alerts(List.of(
-                    Map.of("id", 1, "message", "Server maintenance scheduled", "type", "Maintenance", "priority", "medium")
+                    Map.<String, Object>of("id", 1, "message", "Server maintenance scheduled", "type", "Maintenance", "priority", "medium")
                 ))
                 .topPerformers(List.of(
-                    Map.of("id", 1, "name", "Dr. Smith", "dept", "CSE", "rating", 4.8, "students", 150)
+                    Map.<String, Object>of("id", 1, "name", "Dr. Smith", "dept", "CSE", "rating", 4.8, "students", 150)
                 ))
                 .recentActivities(new ArrayList<>())
                 .build();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DashboardResponse getHodDashboard(Long userId) {
-        Map<String, Object> stats = new HashMap<>();
-        stats.put("totalTeachers", 12);
-        stats.put("totalClasses", 8);
-        stats.put("totalStudents", 320);
-        stats.put("averageAttendance", 88.0);
+        try {
+            Hod hod = hodRepository.findByUserId(userId)
+                    .orElseThrow(() -> new RuntimeException("HOD not found for user ID: " + userId));
+            
+            if (hod.getDepartment() == null) {
+                throw new RuntimeException("HOD has no department assigned");
+            }
+            
+            Long deptId = hod.getDepartment().getId();
 
-        Map<String, Object> charts = new HashMap<>();
-        charts.put("attendanceTrend", List.of(
-            Map.of("month", "Jan", "attendance", 85),
-            Map.of("month", "Feb", "attendance", 88)
-        ));
-        charts.put("subjectPerformance", List.of(
-            Map.of("subject", "Java", "avgMarks", 85),
-            Map.of("subject", "Python", "avgMarks", 82)
-        ));
+            long teacherCount = teacherRepository.countActiveByDepartmentId(deptId);
+            long studentCount = studentRepository.countByDepartment(deptId);
+            long classCount = classRepository.findActiveClassesByDepartment(deptId).size();
+            double avgAttendance = calculateDepartmentAttendance(deptId);
 
-        return DashboardResponse.builder()
-                .stats(stats)
-                .charts(charts)
-                .teacherWorkload(List.of(
-                    Map.of("name", "Dr. Smith", "hours", 18, "classes", 4, "students", 120)
-                ))
-                .notifications(List.of(
-                    Map.of("id", 1, "title", "New Leave Request", "message", "John Doe applied for leave", "read", false)
-                ))
-                .upcomingEvents(List.of(
-                    Map.of("id", 1, "title", "Dept Meeting", "date", new Date(), "type", "meeting")
-                ))
-                .build();
+            Map<String, Object> stats = new HashMap<>();
+            stats.put("totalTeachers", teacherCount);
+            stats.put("totalClasses", classCount);
+            stats.put("totalStudents", studentCount);
+            stats.put("averageAttendance", avgAttendance);
+
+            Map<String, Object> charts = new HashMap<>();
+            charts.put("attendanceTrend", List.of(
+                Map.<String, Object>of("month", "Mar", "attendance", avgAttendance)
+            ));
+
+            return DashboardResponse.builder()
+                    .stats(stats)
+                    .charts(charts)
+                    .build();
+        } catch (Exception e) {
+            // Return empty/default dashboard instead of 500
+            return DashboardResponse.builder()
+                    .stats(Map.of(
+                        "totalTeachers", 0,
+                        "totalClasses", 0,
+                        "totalStudents", 0,
+                        "averageAttendance", 0.0
+                    ))
+                    .charts(Map.of())
+                    .build();
+        }
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DashboardResponse getTeacherDashboard(Long userId) {
-        Map<String, Object> stats = new HashMap<>();
-        stats.put("totalClasses", 4);
-        stats.put("totalStudents", 120);
-        stats.put("todayClasses", 2);
-        stats.put("pendingAttendance", 1);
-        stats.put("pendingMarks", 0);
-        stats.put("averageAttendance", 92.0);
-        stats.put("pendingLeaves", 0);
+        try {
+            Teacher teacher = teacherRepository.findByUserId(userId)
+                    .orElseThrow(() -> new RuntimeException("Teacher not found"));
+            
+            List<com.university.sms.model.Class> assignedClasses = classRepository.findByAdvisorId(teacher.getId());
+            
+            // Get today's classes from timetable
+            java.time.DayOfWeek dayOfWeek = java.util.Calendar.getInstance().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate().getDayOfWeek();
+            com.university.sms.model.enums.DayOfWeek appDay = com.university.sms.model.enums.DayOfWeek.valueOf(dayOfWeek.name());
+            long todayClassesCount = timetableRepository.countClassesByTeacherAndDay(teacher.getId(), appDay);
 
-        Map<String, Object> charts = new HashMap<>();
-        charts.put("attendanceTrend", List.of(
-            Map.of("month", "Jan", "attendance", 90),
-            Map.of("month", "Feb", "attendance", 92)
-        ));
-        charts.put("performance", List.of(
-            Map.of("subject", "Java", "avgMarks", 85)
-        ));
+            Map<String, Object> stats = new HashMap<>();
+            stats.put("totalClasses", assignedClasses.size());
+            stats.put("totalStudents", assignedClasses.stream().mapToLong(c -> classRepository.countActiveStudentsInClass(c.getId())).sum());
+            stats.put("todayClasses", todayClassesCount);
+            stats.put("pendingAttendance", 0); // Logic for pending attendance could be more complex
+            stats.put("pendingMarks", 0);
+            stats.put("averageAttendance", calculateTeacherAttendance(teacher.getId()));
+            stats.put("pendingLeaves", leaveRepository.countPendingByAdvisorId(teacher.getId()));
 
-        return DashboardResponse.builder()
-                .stats(stats)
-                .charts(charts)
-                .assignedClasses(List.of(
-                    Map.of("id", 1, "name", "CSE-A", "subject", "Java", "students", 60, "schedule", "Mon, Wed", "room", "101")
-                ))
-                .upcomingClasses(List.of(
-                    Map.of("id", 1, "name", "CSE-A", "subject", "Java", "time", "10:00 AM", "room", "101", "duration", "1h")
-                ))
-                .pendingTasks(List.of(
-                    Map.of("id", 1, "title", "Mark Attendance", "type", "attendance", "priority", "high")
-                ))
-                .recentActivities(new ArrayList<>())
-                .build();
+            return DashboardResponse.builder()
+                    .stats(stats)
+                    .assignedClasses(assignedClasses.stream().map(c -> {
+                        Map<String, Object> classMap = new HashMap<>();
+                        classMap.put("id", c.getId());
+                        classMap.put("name", c.getClassName() != null ? c.getClassName() : "Unknown");
+                        classMap.put("students", classRepository.countActiveStudentsInClass(c.getId()));
+                        classMap.put("subject", "Class Advisor");
+                        classMap.put("room", "N/A");
+                        classMap.put("schedule", "Regular");
+                        return classMap;
+                    }).collect(Collectors.toList()))
+                    .charts(Map.of(
+                        "attendanceTrend", List.of(Map.of("month", "Mar", "attendance", stats.getOrDefault("averageAttendance", 0.0))),
+                        "performance", List.of()
+                    ))
+                    .upcomingClasses(new ArrayList<>())
+                    .recentActivities(new ArrayList<>())
+                    .pendingTasks(new ArrayList<>())
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the error
+            Map<String, Object> emptyStats = new HashMap<>();
+            emptyStats.put("totalClasses", 0);
+            emptyStats.put("totalStudents", 0);
+            emptyStats.put("todayClasses", 0);
+            emptyStats.put("pendingAttendance", 0);
+            emptyStats.put("pendingMarks", 0);
+            emptyStats.put("averageAttendance", 0.0);
+            emptyStats.put("pendingLeaves", 0);
+
+            return DashboardResponse.builder()
+                    .stats(emptyStats)
+                    .assignedClasses(new ArrayList<>())
+                    .charts(Map.of())
+                    .build();
+        }
     }
 
     @Override
@@ -172,7 +231,8 @@ public class DashboardServiceImpl implements DashboardService {
         switch (role) {
             case "ROLE_PRINCIPAL": return getPrincipalDashboard(currentUser.getId());
             case "ROLE_HOD": return getHodDashboard(currentUser.getId());
-            case "ROLE_TEACHER": return getTeacherDashboard(currentUser.getId());
+            case "ROLE_TEACHER":
+            case "ROLE_CA": return getTeacherDashboard(currentUser.getId());
             case "ROLE_STUDENT": return getStudentDashboard(currentUser.getId());
             default: return new DashboardResponse();
         }
@@ -181,6 +241,22 @@ public class DashboardServiceImpl implements DashboardService {
     private double calculateOverallAttendance() {
         try {
             return Optional.ofNullable(attendanceRepository.getAverageAttendanceOverall()).orElse(0.0);
+        } catch (Exception e) {
+            return 0.0;
+        }
+    }
+
+    private double calculateDepartmentAttendance(Long deptId) {
+        try {
+            return Optional.ofNullable(attendanceRepository.getAverageAttendanceByDepartment(deptId)).orElse(0.0);
+        } catch (Exception e) {
+            return 0.0;
+        }
+    }
+
+    private double calculateTeacherAttendance(Long teacherId) {
+        try {
+            return Optional.ofNullable(attendanceRepository.getAverageAttendanceByTeacher(teacherId)).orElse(0.0);
         } catch (Exception e) {
             return 0.0;
         }

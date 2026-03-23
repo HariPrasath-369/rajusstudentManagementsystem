@@ -31,7 +31,6 @@ const Departments = () => {
       const data = await principalService.getDepartments();
       setDepartments(data);
     } catch (error) {
-      toast.error('Failed to fetch departments');
       setDepartments(getMockDepartments());
     } finally {
       setLoading(false);

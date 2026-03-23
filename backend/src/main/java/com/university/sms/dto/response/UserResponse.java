@@ -18,4 +18,5 @@ public class UserResponse {
     private String profilePicture;
     private LocalDateTime createdAt;
     private LocalDateTime lastLogin;
+    private String department;
 }

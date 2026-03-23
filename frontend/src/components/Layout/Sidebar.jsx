@@ -254,13 +254,6 @@ const Sidebar = ({ sidebarOpen, mobileMenuOpen, toggleMobileMenu }) => {
         icon: Settings,
         path: '/profile/settings',
         roles: ['ROLE_PRINCIPAL', 'ROLE_HOD', 'ROLE_TEACHER', 'ROLE_CA', 'ROLE_STUDENT']
-      },
-      {
-        key: 'help',
-        label: 'Help & Support',
-        icon: HelpCircle,
-        path: '/help',
-        roles: ['ROLE_PRINCIPAL', 'ROLE_HOD', 'ROLE_TEACHER', 'ROLE_CA', 'ROLE_STUDENT']
       }
     ];
 

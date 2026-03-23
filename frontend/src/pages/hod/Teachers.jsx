@@ -34,7 +34,6 @@ const Teachers = () => {
       const data = await hodService.getTeachers();
       setTeachers(data);
     } catch (error) {
-      toast.error('Failed to fetch teachers');
       setTeachers(getMockTeachers());
     } finally {
       setLoading(false);

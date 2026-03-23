@@ -16,4 +16,5 @@ public interface UserService {
     void removeHod(Long hodId);
     List<UserResponse> getAllHods();
     UserResponse getUserById(Long id);
+    List<UserResponse> getAvailableTeachers();
 }

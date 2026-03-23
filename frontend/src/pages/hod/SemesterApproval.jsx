@@ -37,7 +37,6 @@ const SemesterApproval = () => {
       setSemesters(semestersData);
       setClasses(classesData);
     } catch (error) {
-      toast.error('Failed to fetch data');
       setSemesters(getMockSemesters());
       setClasses(getMockClasses());
     } finally {

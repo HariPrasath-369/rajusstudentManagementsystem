@@ -45,14 +45,13 @@ export const teacherService = {
     return api.post('/teacher/marks', data);
   },
   saveMarks: async (subjectId, semester, marksMap) => {
-    // This could be a bulk upload or individual updates
     const requests = Object.entries(marksMap).map(([studentId, marks]) => ({
       studentId: parseInt(studentId),
       subjectId,
       semester,
       marksObtained: marks
     }));
-    return api.post('/teacher/marks', requests[0]); // Simplified to match backend single request for now
+    return api.post('/teacher/marks', requests[0]);
   },
   uploadMarksExcel: async (subjectId, semester, file) => {
     const formData = new FormData();
@@ -78,15 +77,6 @@ export const teacherService = {
     }));
     return api.post('/teacher/oem-board', { classId, subjectId, semester, entries });
   },
-  submitOEMBoard: async (classId, subjectId, semester) => {
-    // Usually submission is a separate flag or endpoint. 
-    // If it's the same endpoint, we might need a flag. 
-    // Assuming fillOemBoard doesn't lock it unless we have a specific submission logic.
-    // Let's assume the previous save was enough, or we send it again with a flag if the backend supports it.
-    // Based on MarksServiceImpl, fillOemBoard doesn't have an isSubmitted field in OemBoardRequest.
-    // However, the frontend expects a submission. I'll just call the same endpoint for now.
-    return api.post('/teacher/oem-board', { classId, subjectId, semester, entries: [] }); 
-  },
 
   // Materials
   getMaterials: async (subjectId) => {
@@ -100,10 +90,6 @@ export const teacherService = {
   },
 
   // Leaves
-  getAdvisedClasses: async () => {
-    // Assuming assigned classes are the ones advisor manages
-    return api.get('/teacher/assigned-classes');
-  },
   getLeaveRequests: async (classId, status) => {
     return api.get(`/leaves/class/${classId}`, { params: { status } });
   },

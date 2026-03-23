@@ -119,4 +119,11 @@ public class PrincipalController {
     public ResponseEntity<?> getStudentFailurePrediction() {
         return ResponseEntity.ok(analyticsService.getStudentFailurePrediction());
     }
+
+    @GetMapping("/teachers/available")
+    @Operation(summary = "Get all available teachers for HOD assignment")
+    public ResponseEntity<List<UserResponse>> getAvailableTeachers() {
+        List<UserResponse> teachers = userService.getAvailableTeachers();
+        return ResponseEntity.ok(teachers);
+    }
 }

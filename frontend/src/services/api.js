@@ -34,7 +34,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response) {
       const { status, data } = error.response;
-      
+
       // Handle different error statuses
       switch (status) {
         case 401:
@@ -76,7 +76,7 @@ api.interceptors.response.use(
       // Something happened in setting up the request
       toast.error(error.message || 'Request failed');
     }
-    
+
     return Promise.reject(error);
   }
 );
@@ -85,7 +85,7 @@ api.interceptors.response.use(
 export const uploadFile = async (url, file, onProgress) => {
   const formData = new FormData();
   formData.append('file', file);
-  
+
   const config = {
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -97,7 +97,7 @@ export const uploadFile = async (url, file, onProgress) => {
       }
     },
   };
-  
+
   return api.post(url, formData, config);
 };
 
@@ -106,7 +106,7 @@ export const downloadFile = async (url, filename) => {
   const response = await api.get(url, {
     responseType: 'blob',
   });
-  
+
   const blob = new Blob([response], { type: response.type });
   const downloadUrl = window.URL.createObjectURL(blob);
   const link = document.createElement('a');

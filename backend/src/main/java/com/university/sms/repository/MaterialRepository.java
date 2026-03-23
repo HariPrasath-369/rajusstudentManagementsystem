@@ -44,4 +44,6 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     List<Material> findByStudentClassIdOrderByUploadedAtDesc(Long classId);
 
     List<Material> findByTeacherIdOrderByUploadedAtDesc(Long teacherId);
+
+    List<Material> findByTeacherIdAndSubjectIdOrderByUploadedAtDesc(Long teacherId, Long subjectId);
 }

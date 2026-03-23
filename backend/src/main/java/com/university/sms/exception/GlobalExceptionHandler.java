@@ -3,6 +3,7 @@ package com.university.sms.exception;
 import com.university.sms.dto.response.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -110,6 +111,19 @@ public class GlobalExceptionHandler {
         logger.error("Null pointer exception: ", ex);
         ApiResponse response = new ApiResponse(false, "An unexpected error occurred");
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
+        logger.error("Data integrity violation: {}", ex.getMessage());
+        String message = "Data integrity error";
+        if (ex.getMessage() != null && ex.getMessage().toLowerCase().contains("email")) {
+            message = "Email address is already in use";
+        } else if (ex.getMessage() != null && ex.getMessage().toLowerCase().contains("duplicate")) {
+            message = "A record with this information already exists";
+        }
+        ApiResponse response = new ApiResponse(false, message);
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(Exception.class)

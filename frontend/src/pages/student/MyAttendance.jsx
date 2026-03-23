@@ -121,13 +121,13 @@ const MyAttendance = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-center md:text-left">
             <p className="text-primary-100 mb-2">Overall Attendance</p>
-            <p className="text-5xl font-bold">{attendanceData.overall}%</p>
+            <p className="text-5xl font-bold">{(attendanceData?.overall || 0)}%</p>
           </div>
           <div className="flex-1">
             <div className="w-full bg-white/20 rounded-full h-4">
               <div 
                 className="bg-white h-4 rounded-full transition-all duration-500"
-                style={{ width: `${attendanceData.overall}%` }}
+                style={{ width: `${(attendanceData?.overall || 0)}%` }}
               />
             </div>
             <div className="flex justify-between mt-2 text-sm text-primary-100">
@@ -139,15 +139,15 @@ const MyAttendance = () => {
           </div>
           <div className="text-center">
             <p className="text-primary-100">Status</p>
-            <p className={`text-xl font-bold ${attendanceData.overall >= 75 ? 'text-green-300' : 'text-red-300'}`}>
-              {attendanceData.overall >= 75 ? 'Good Standing' : 'At Risk'}
+            <p className={`text-xl font-bold ${(attendanceData?.overall || 0) >= 75 ? 'text-green-300' : 'text-red-300'}`}>
+              {(attendanceData?.overall || 0) >= 75 ? 'Good Standing' : 'At Risk'}
             </p>
           </div>
         </div>
       </Card>
 
       {/* Warning Banner for Low Attendance */}
-      {attendanceData.overall < 75 && (
+      {(attendanceData?.overall || 0) < 75 && (
         <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg flex items-start gap-3">
           <AlertCircle size={20} className="text-red-500 mt-0.5" />
           <div>

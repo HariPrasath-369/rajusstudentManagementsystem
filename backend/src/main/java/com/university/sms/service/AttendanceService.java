@@ -3,6 +3,7 @@ package com.university.sms.service;
 import com.university.sms.dto.request.AttendanceRequest;
 import com.university.sms.dto.response.AttendanceResponse;
 import com.university.sms.dto.response.AttendanceStatisticsResponse;
+import com.university.sms.dto.response.StudentAttendanceDashboardResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -21,4 +22,5 @@ public interface AttendanceService {
     String generateQrCodeForAttendance(Long classId, LocalDate date, Long teacherId);
     void processQrAttendance(String qrCode, Long studentId);
     void checkAndSendLowAttendanceAlerts();
+    StudentAttendanceDashboardResponse getStudentAttendanceDashboard(Long studentId);
 }

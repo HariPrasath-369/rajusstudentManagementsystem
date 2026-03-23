@@ -66,25 +66,27 @@ const StudentDashboard = () => {
 
   const StatCard = ({ title, value, icon: Icon, trend, color, suffix = '' }) => (
     <motion.div
-      whileHover={{ y: -4 }}
-      className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700/80 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between transition-all hover:shadow-lg hover:border-blue-100"
+      whileHover={{ y: -5, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 300 }}
+      className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl shadow-lg border border-white/20 dark:border-gray-700/50 p-6 flex flex-col justify-between transition-all hover:shadow-xl hover:shadow-[color]/20 relative overflow-hidden group"
     >
-      <div className="flex items-center gap-5">
-        <div className={`p-4 rounded-[1rem] bg-${color}-50 dark:bg-${color}-900/20 text-${color}-600 dark:text-${color}-400`}>
-          <Icon className="h-8 w-8" strokeWidth={1.5} />
+      <div className={`absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-${color}-500/10 rounded-full blur-2xl transform group-hover:scale-150 transition-transform duration-500`}></div>
+      <div className="flex justify-between items-start mb-4 relative z-10">
+        <div className={`p-3 rounded-2xl bg-gradient-to-br from-${color}-500/20 to-${color}-600/10 text-${color}-600 dark:text-${color}-400 shadow-inner`}>
+          <Icon className="h-6 w-6" strokeWidth={2} />
         </div>
-        <div className="flex flex-col">
-          <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-1 tracking-wider uppercase">{title}</p>
-          <h3 className="text-3xl font-extrabold text-gray-900 dark:text-white">
-            {typeof value === 'number' ? value.toLocaleString() : value || 0}{suffix}
-          </h3>
-        </div>
+        {trend ? (
+          <div className={`px-2.5 py-1 rounded-full text-xs font-bold backdrop-blur-md ${trend > 0 ? 'bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20'}`}>
+            {trend > 0 ? '↑' : '↓'} {Math.abs(trend)}%
+          </div>
+        ) : null}
       </div>
-      {trend ? (
-        <div className={`mt-4 sm:mt-0 px-3 py-1.5 rounded-full text-xs font-bold ${trend > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-          {trend > 0 ? '↑' : '↓'} {Math.abs(trend)}%
-        </div>
-      ) : null}
+      <div className="relative z-10">
+        <h3 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">
+          {typeof value === 'number' ? value.toLocaleString() : value || 0}<span className="text-xl font-bold text-gray-400 ml-1">{suffix}</span>
+        </h3>
+        <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mt-1 uppercase tracking-wider">{title}</p>
+      </div>
     </motion.div>
   );
 
@@ -105,39 +107,67 @@ const StudentDashboard = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-2xl p-6 text-white"
+        className="relative overflow-hidden bg-gradient-to-br from-indigo-900 via-primary-800 to-indigo-900 rounded-3xl p-8 md:p-10 text-white shadow-2xl border border-white/10"
       >
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold mb-2">
-              Welcome back, {user?.name || 'Student'}!
-            </h1>
-            <p className="text-primary-100">
-              Track your academic progress and stay updated with your classes
-            </p>
+        <div className="absolute top-0 right-0 w-[30rem] h-[30rem] bg-indigo-500/20 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/3"></div>
+        <div className="absolute bottom-0 left-0 w-[20rem] h-[20rem] bg-rose-500/20 rounded-full blur-[60px] translate-y-1/2 -translate-x-1/4"></div>
+        
+        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="flex items-center gap-6">
+            <div className="h-20 w-20 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-inner">
+              <span className="text-4xl font-bold bg-gradient-to-br from-white to-white/60 bg-clip-text text-transparent">
+                {user?.name?.charAt(0) || 'S'}
+              </span>
+            </div>
+            <div>
+              <motion.h1 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+                className="text-3xl md:text-4xl font-black mb-2 tracking-tight"
+              >
+                Welcome back, <span className="bg-gradient-to-r from-blue-200 to-indigo-200 bg-clip-text text-transparent">{user?.name || 'Student'}</span>
+              </motion.h1>
+              <p className="text-primary-100/80 font-medium text-lg flex items-center gap-2">
+                <CalendarDays size={18} />
+                {format(new Date(), 'EEEE, MMMM do, yyyy')}
+              </p>
+            </div>
           </div>
-          <div className="mt-4 md:mt-0 flex gap-3">
-            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20" onClick={() => navigate('/student/attendance')}>
+          <div className="flex gap-3 w-full md:w-auto mt-4 md:mt-0">
+            <Button 
+              variant="outline" 
+              className="flex-1 md:flex-none bg-white/5 backdrop-blur-md border-white/10 text-white hover:bg-white/10 hover:border-white/30 transition-all rounded-xl py-2.5 font-semibold shadow-lg" 
+              onClick={() => navigate('/student/attendance')}
+            >
               <Eye size={18} className="mr-2" />
-              View Attendance
+              Attendance
             </Button>
-            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20" onClick={() => navigate('/student/marks')}>
-              <Award size={18} className="mr-2" />
-              View Marks
+            <Button 
+              className="flex-1 md:flex-none bg-indigo-500 hover:bg-indigo-400 text-white border-0 shadow-lg shadow-indigo-500/30 transition-all rounded-xl py-2.5 font-semibold" 
+              onClick={() => navigate('/student/materials')}
+            >
+              <BookOpen size={18} className="mr-2" />
+              Materials
             </Button>
           </div>
         </div>
       </motion.div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <StatCard title="Attendance" value={dashboardData.stats.attendancePercentage} icon={UserCheck} color="green" suffix="%" />
-        <StatCard title="CGPA" value={dashboardData.stats.cgpa} icon={Award} color="blue" />
-        <StatCard title="Total Subjects" value={dashboardData.stats.totalSubjects} icon={BookOpen} color="purple" />
-        <StatCard title="Credits" value={dashboardData.stats.totalCredits} icon={Activity} color="orange" />
-        <StatCard title="Assignments" value={dashboardData.stats.completedAssignments} icon={FileText} color="teal" />
-        <StatCard title="Upcoming Exams" value={dashboardData.stats.upcomingExams} icon={Calendar} color="red" />
-      </div>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
+      >
+        <StatCard title="Attendance" value={dashboardData.stats.attendancePercentage} icon={UserCheck} color="emerald" suffix="%" trend={2.5} />
+        <StatCard title="CGPA" value={dashboardData.stats.cgpa} icon={Award} color="indigo" />
+        <StatCard title="Total Subjects" value={dashboardData.stats.totalSubjects} icon={BookOpen} color="violet" />
+        <StatCard title="Credits" value={dashboardData.stats.totalCredits} icon={Activity} color="amber" />
+        <StatCard title="Assignments" value={dashboardData.stats.completedAssignments} icon={FileText} color="cyan" />
+        <StatCard title="Upcoming Exams" value={dashboardData.stats.upcomingExams} icon={Calendar} color="rose" />
+      </motion.div>
 
       {/* Performance Chart */}
       <LineChart
@@ -150,28 +180,38 @@ const StudentDashboard = () => {
         colors={['#3b82f6']}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Today's Schedule */}
-        <Card title="Today's Schedule" className="lg:col-span-2">
-          <div className="space-y-3">
+        <div className="lg:col-span-2">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <CalendarDays className="h-5 w-5 text-indigo-500" />
+              Today's Schedule
+            </h2>
+            <Button variant="ghost" size="sm" className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 font-medium" onClick={() => navigate('/student/timetable')}>
+              View Full Timetable <ChevronRight size={16} className="ml-1" />
+            </Button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {dashboardData.upcomingClasses.map((classItem, index) => (
               <motion.div
                 key={classItem.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
-                className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all"
+                className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700/80 shadow-sm hover:shadow-md transition-all group relative overflow-hidden"
               >
-                <div className="flex justify-between items-start mb-2">
+                <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500 rounded-l-2xl"></div>
+                <div className="flex justify-between items-start mb-3">
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white">{classItem.subject}</h4>
-                    <p className="text-sm text-primary-600 dark:text-primary-400">{classItem.teacher}</p>
+                    <h4 className="font-bold text-gray-900 dark:text-white text-lg">{classItem.subject}</h4>
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mt-0.5">{classItem.teacher}</p>
                   </div>
-                  <span className="text-sm font-medium text-primary-600 bg-primary-50 dark:bg-primary-900/30 px-2 py-1 rounded">
+                  <span className="text-xs font-bold text-indigo-700 bg-indigo-50 dark:bg-indigo-900/40 dark:text-indigo-300 px-3 py-1.5 rounded-full border border-indigo-100 dark:border-indigo-800 backdrop-blur-sm shadow-sm">
                     {classItem.time}
                   </span>
                 </div>
-                <div className="flex items-center gap-4 text-xs text-gray-500">
+                <div className="flex items-center gap-4 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 p-3 rounded-xl">
                   <div className="flex items-center gap-1">
                     <School size={12} />
                     <span>{classItem.room}</span>
@@ -183,120 +223,87 @@ const StudentDashboard = () => {
                 </div>
               </motion.div>
             ))}
+            {dashboardData.upcomingClasses.length === 0 && (
+              <div className="col-span-full py-10 text-center bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700">
+                <School className="h-10 w-10 text-gray-400 mx-auto mb-3" />
+                <p className="text-gray-500 dark:text-gray-400 font-medium">No classes scheduled for today.</p>
+              </div>
+            )}
           </div>
-          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <Button variant="ghost" size="sm" fullWidth onClick={() => navigate('/student/timetable')}>
-              View Full Timetable
-            </Button>
-          </div>
-        </Card>
+        </div>
 
         {/* Right Column */}
         <div className="space-y-6">
-          {/* Notifications */}
-          <Card title="Notifications">
-            <div className="space-y-3 max-h-80 overflow-y-auto">
+          {/* Notifications Placeholder */}
+          <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700/80">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <Bell className="h-5 w-5 text-rose-500" />
+                Notifications
+              </h2>
+            </div>
+            <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
               {dashboardData.notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className={`p-3 rounded-lg cursor-pointer transition-colors ${
+                  className={`p-4 rounded-2xl cursor-pointer transition-all border ${
                     !notification.read 
-                      ? 'bg-primary-50 dark:bg-primary-900/20 border-l-4 border-primary-500'
-                      : 'hover:bg-gray-50 dark:hover:bg-gray-700'
+                      ? 'bg-rose-50/50 dark:bg-rose-900/10 border-rose-100 dark:border-rose-900/30 hover:bg-rose-50 dark:hover:bg-rose-900/20'
+                      : 'bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600'
                   }`}
                 >
-                  <div className="flex items-start gap-3">
-                    {notification.type === 'warning' && <AlertCircle size={16} className="text-yellow-500 mt-0.5" />}
-                    {notification.type === 'info' && <Bell size={16} className="text-blue-500 mt-0.5" />}
-                    {notification.type === 'success' && <CheckCircle size={16} className="text-green-500 mt-0.5" />}
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">{notification.title}</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{notification.message}</p>
+                  <div className="flex gap-3">
+                    <div className="mt-0.5">
+                      {notification.type === 'warning' && <AlertCircle size={18} className="text-amber-500" />}
+                      {notification.type === 'info' && <Bell size={18} className="text-blue-500" />}
+                      {notification.type === 'success' && <CheckCircle size={18} className="text-emerald-500" />}
+                    </div>
+                    <div>
+                      <p className={`text-sm font-semibold ${!notification.read ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'}`}>
+                        {notification.title}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">{notification.message}</p>
                     </div>
                   </div>
                 </div>
               ))}
-            </div>
-          </Card>
-
-          {/* Recent Activities */}
-          <Card title="Recent Activities">
-            <div className="space-y-3">
-              {dashboardData.recentActivities.map((activity) => (
-                <div key={activity.id} className="flex items-start gap-3 p-2">
-                  <div className={`p-2 rounded-lg ${
-                    activity.type === 'attendance' ? 'bg-green-100 dark:bg-green-900/30' :
-                    activity.type === 'marks' ? 'bg-blue-100 dark:bg-blue-900/30' :
-                    'bg-purple-100 dark:bg-purple-900/30'
-                  }`}>
-                    {activity.type === 'attendance' ? <UserCheck size={14} /> :
-                     activity.type === 'marks' ? <Award size={14} /> :
-                     <FileText size={14} />}
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-900 dark:text-white">{activity.message}</p>
-                    <p className="text-xs text-gray-500">{activity.time}</p>
-                    {activity.marks && (
-                      <span className="text-xs font-medium text-green-600">Score: {activity.marks}%</span>
-                    )}
-                  </div>
+              {dashboardData.notifications.length === 0 && (
+                <div className="text-center py-6">
+                  <p className="text-sm text-gray-500">No new notifications</p>
                 </div>
-              ))}
+              )}
             </div>
-          </Card>
+          </div>
         </div>
       </div>
 
       {/* Quick Actions */}
-      <Card title="Quick Actions">
+      <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700/80">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+          <Activity className="h-5 w-5 text-indigo-500" />
+          Quick Actions
+        </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          <button
-            onClick={() => navigate('/student/attendance')}
-            className="p-4 h-full text-center rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all group flex flex-col items-center justify-center gap-2"
-          >
-            <div className="p-2 rounded-full bg-primary-50 dark:bg-primary-900/30 w-12 h-12 mx-auto mb-2 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/50 transition-colors">
-              <UserCheck className="h-6 w-6 text-primary-600 mx-auto" />
-            </div>
-            <span className="text-sm font-medium">View Attendance</span>
-          </button>
-          <button
-            onClick={() => navigate('/student/marks')}
-            className="p-4 h-full text-center rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all group flex flex-col items-center justify-center gap-2"
-          >
-            <div className="p-2 rounded-full bg-primary-50 dark:bg-primary-900/30 w-12 h-12 mx-auto mb-2 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/50 transition-colors">
-              <Award className="h-6 w-6 text-primary-600 mx-auto" />
-            </div>
-            <span className="text-sm font-medium">View Marks</span>
-          </button>
-          <button
-            onClick={() => navigate('/student/timetable')}
-            className="p-4 h-full text-center rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all group flex flex-col items-center justify-center gap-2"
-          >
-            <div className="p-2 rounded-full bg-primary-50 dark:bg-primary-900/30 w-12 h-12 mx-auto mb-2 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/50 transition-colors">
-              <CalendarDays className="h-6 w-6 text-primary-600 mx-auto" />
-            </div>
-            <span className="text-sm font-medium">Timetable</span>
-          </button>
-          <button
-            onClick={() => navigate('/student/leave')}
-            className="p-4 h-full text-center rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all group flex flex-col items-center justify-center gap-2"
-          >
-            <div className="p-2 rounded-full bg-primary-50 dark:bg-primary-900/30 w-12 h-12 mx-auto mb-2 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/50 transition-colors">
-              <Calendar className="h-6 w-6 text-primary-600 mx-auto" />
-            </div>
-            <span className="text-sm font-medium">Apply Leave</span>
-          </button>
-          <button
-            onClick={() => navigate('/student/materials')}
-            className="p-4 h-full text-center rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all group flex flex-col items-center justify-center gap-2"
-          >
-            <div className="p-2 rounded-full bg-primary-50 dark:bg-primary-900/30 w-12 h-12 mx-auto mb-2 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/50 transition-colors">
-              <BookOpen className="h-6 w-6 text-primary-600 mx-auto" />
-            </div>
-            <span className="text-sm font-medium">Study Materials</span>
-          </button>
+          {[
+            { title: 'Attendance', icon: UserCheck, color: 'emerald', path: '/student/attendance' },
+            { title: 'Marks', icon: Award, color: 'indigo', path: '/student/marks' },
+            { title: 'Timetable', icon: CalendarDays, color: 'violet', path: '/student/timetable' },
+            { title: 'Apply Leave', icon: Calendar, color: 'rose', path: '/student/leave' },
+            { title: 'Materials', icon: BookOpen, color: 'amber', path: '/student/materials' }
+          ].map((action, idx) => (
+            <button
+              key={idx}
+              onClick={() => navigate(action.path)}
+              className={`p-6 text-center rounded-2xl border border-gray-100 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col items-center justify-center gap-3`}
+            >
+              <div className={`p-4 rounded-2xl bg-${action.color}-100/50 dark:bg-${action.color}-900/20 text-${action.color}-600 dark:text-${action.color}-400 group-hover:scale-110 transition-transform duration-300`}>
+                <action.icon className="h-7 w-7" strokeWidth={2} />
+              </div>
+              <span className="text-sm font-bold text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">{action.title}</span>
+            </button>
+          ))}
         </div>
-      </Card>
+      </div>
 
       {/* Performance Summary */}
       <Card title="Performance Summary">

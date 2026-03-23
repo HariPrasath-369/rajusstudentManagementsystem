@@ -53,19 +53,19 @@ const PrincipalDashboard = () => {
       const data = await principalService.getDashboard();
       setDashboardData({
         stats: {
-          totalStudents: data.totalStudents || 0,
-          totalTeachers: data.totalTeachers || 0,
-          totalDepartments: data.totalDepartments || 0,
-          totalClasses: data.totalClasses || 0,
-          averageAttendance: data.averageAttendance || 0,
-          overallPassRate: data.overallPassRate || 0,
-          topPerformingDept: data.topPerformingDept || '-',
-          improvementRate: data.improvementRate || 0
+          totalStudents: data.stats?.totalStudents || 0,
+          totalTeachers: data.stats?.totalTeachers || 0,
+          totalDepartments: data.stats?.totalDepartments || 0,
+          totalClasses: data.stats?.totalClasses || 0,
+          averageAttendance: data.stats?.averageAttendance || 0,
+          overallPassRate: data.stats?.overallPassRate || 0,
+          topPerformingDept: data.stats?.topPerformingDept || '-',
+          improvementRate: data.stats?.improvementRate || 0
         },
         charts: {
-          studentEnrollment: data.studentEnrollment || [],
-          departmentPerformance: data.departmentPerformance || [],
-          attendanceTrend: data.attendanceTrend || []
+          studentEnrollment: data.charts?.studentEnrollment || [],
+          departmentPerformance: data.charts?.departmentPerformance || [],
+          attendanceTrend: data.charts?.attendanceTrend || []
         },
         recentActivities: data.recentActivities || [],
         topPerformers: data.topPerformers || [],

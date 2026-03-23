@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import com.university.sms.dto.response.*;
 import java.util.List;
 
 @RestController
@@ -49,11 +50,10 @@ public class StudentController {
     private DashboardService dashboardService;
 
     @GetMapping("/attendance")
-    @Operation(summary = "Get attendance percentage")
-    public ResponseEntity<Double> getAttendance(@CurrentUser UserPrincipal currentUser) {
-        Double attendance = attendanceService.getStudentAttendancePercentage(
-                currentUser.getId(), null);
-        return ResponseEntity.ok(attendance);
+    @Operation(summary = "Get attendance dashboard data")
+    public ResponseEntity<StudentAttendanceDashboardResponse> getAttendance(@CurrentUser UserPrincipal currentUser) {
+        StudentAttendanceDashboardResponse response = attendanceService.getStudentAttendanceDashboard(currentUser.getId());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/attendance/subject/{subjectId}")
@@ -114,9 +114,10 @@ public class StudentController {
     }
 
     @GetMapping("/marks")
-    @Operation(summary = "Get student marks")
-    public ResponseEntity<List<MarksResponse>> getMarks(@CurrentUser UserPrincipal currentUser) {
-        List<MarksResponse> marks = marksService.getStudentMarks(currentUser.getId());
+    @Operation(summary = "Get student marks dashboard data")
+    public ResponseEntity<StudentMarksDashboardResponse> getMarks(@CurrentUser UserPrincipal currentUser,
+                                                                   @RequestParam(required = false) Integer semester) {
+        StudentMarksDashboardResponse marks = marksService.getStudentMarksDashboard(currentUser.getId(), semester);
         return ResponseEntity.ok(marks);
     }
 
@@ -143,5 +144,33 @@ public class StudentController {
     public ResponseEntity<DashboardResponse> getDashboard(@CurrentUser UserPrincipal currentUser) {
         DashboardResponse dashboard = dashboardService.getStudentDashboard(currentUser.getId());
         return ResponseEntity.ok(dashboard);
+    }
+    
+    @GetMapping("/subjects")
+    @Operation(summary = "Get subjects for the student")
+    public ResponseEntity<List<SubjectResponse>> getSubjects(@CurrentUser UserPrincipal currentUser) {
+        // Find student class and return its subjects
+        Long classId = studentService.getStudentClass(currentUser.getId());
+        List<com.university.sms.model.ClassSubject> classSubjects = studentService.getSubjectsByClass(classId);
+        List<SubjectResponse> subjects = classSubjects.stream()
+                .map(cs -> SubjectResponse.builder()
+                        .id(cs.getSubject().getId())
+                        .name(cs.getSubject().getName())
+                        .code(cs.getSubject().getCode())
+                        .creditHours(cs.getSubject().getCreditHours())
+                        .type(cs.getSubject().getIsElective() != null && cs.getSubject().getIsElective() ? "ELECTIVE" : "THEORY")
+                        .build())
+                .collect(java.util.stream.Collectors.toList());
+        return ResponseEntity.ok(subjects);
+    }
+
+    @GetMapping("/materials")
+    @Operation(summary = "Get materials for the student")
+    public ResponseEntity<List<MaterialResponse>> getMaterials(@CurrentUser UserPrincipal currentUser,
+                                                               @RequestParam(required = false) Long subjectId) {
+        // Students can access materials uploaded by teachers for their subjects/classes
+        Long classId = studentService.getStudentClass(currentUser.getId());
+        List<MaterialResponse> materials = studentService.getMaterialsForStudent(classId, subjectId);
+        return ResponseEntity.ok(materials);
     }
 }

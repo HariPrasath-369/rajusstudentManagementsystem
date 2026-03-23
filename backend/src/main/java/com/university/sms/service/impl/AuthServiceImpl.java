@@ -76,13 +76,18 @@ public class AuthServiceImpl implements AuthService {
         user.setName(registerRequest.getName());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setPhoneNumber(registerRequest.getPhoneNumber());
         user.setRole(registerRequest.getRole() != null ? registerRequest.getRole() : Role.ROLE_STUDENT);
         user.setEmailVerified(false);
         user.setIsActive(true);
         
         user = userRepository.save(user);
 
-        emailService.sendWelcomeEmail(user.getEmail(), user.getName());
+        try {
+            emailService.sendWelcomeEmail(user.getEmail(), user.getName());
+        } catch (Exception e) {
+            // Email is non-critical, don't fail registration
+        }
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

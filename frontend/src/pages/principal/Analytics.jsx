@@ -15,7 +15,10 @@ const Analytics = () => {
     teacherRanking: [],
     departmentComparison: [],
     studentPredictions: [],
-    performanceTrends: {}
+    performanceTrend: {
+      attendanceTrend: [],
+      marksTrend: []
+    }
   });
   const [selectedYear, setSelectedYear] = useState('2024');
 
@@ -29,7 +32,6 @@ const Analytics = () => {
       const data = await principalService.getAnalytics(selectedYear);
       setAnalyticsData(data);
     } catch (error) {
-      toast.error('Failed to fetch analytics data');
       setAnalyticsData(getMockData());
     } finally {
       setLoading(false);
@@ -55,7 +57,7 @@ const Analytics = () => {
       { id: 2, name: 'Jane Smith', risk: 'Medium', attendance: 72, marks: 65, recommended: 'Regular monitoring' },
       { id: 3, name: 'Bob Johnson', risk: 'Low', attendance: 88, marks: 82, recommended: 'Continue current path' }
     ],
-    performanceTrends: {
+    performanceTrend: {
       attendanceTrend: [
         { month: 'Jan', attendance: 85 },
         { month: 'Feb', attendance: 86 },
@@ -180,7 +182,7 @@ const Analytics = () => {
         />
         
         <LineChart
-          data={analyticsData.performanceTrends.attendanceTrend}
+          data={analyticsData.performanceTrend?.attendanceTrend || []}
           lines={[
             { key: 'attendance', name: 'Attendance %' },
             { key: 'marks', name: 'Average Marks' }

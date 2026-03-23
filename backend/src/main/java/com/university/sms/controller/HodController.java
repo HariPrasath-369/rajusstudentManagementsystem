@@ -4,7 +4,10 @@ import com.university.sms.dto.request.*;
 import com.university.sms.dto.response.*;
 import com.university.sms.security.CurrentUser;
 import com.university.sms.security.UserPrincipal;
+import com.university.sms.model.*;
+import com.university.sms.repository.HodRepository;
 import com.university.sms.service.*;
+import com.university.sms.exception.ResourceNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +25,9 @@ import java.util.List;
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "HOD", description = "HOD management APIs")
 public class HodController {
+
+    @Autowired
+    private HodRepository hodRepository;
 
     @Autowired
     private TeacherService teacherService;
@@ -170,5 +176,37 @@ public class HodController {
     public ResponseEntity<List<TeacherWorkloadResponse>> getTeacherWorkload(@CurrentUser UserPrincipal currentUser) {
         List<TeacherWorkloadResponse> workload = analyticsService.getTeacherWorkload(currentUser.getId());
         return ResponseEntity.ok(workload);
+    }
+
+    @GetMapping("/subjects")
+    @Operation(summary = "Get all subjects in department")
+    public ResponseEntity<List<SubjectResponse>> getSubjects(@CurrentUser UserPrincipal currentUser) {
+        Hod hod = hodRepository.findByUserId(currentUser.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("HOD not found"));
+        List<Subject> subjects = subjectService.getSubjectsByDepartment(hod.getDepartment().getId());
+        return ResponseEntity.ok(subjects.stream().map(this::mapSubjectToResponse).toList());
+    }
+
+    @GetMapping("/timetable")
+    @Operation(summary = "Get department timetable")
+    public ResponseEntity<List<TimetableResponse>> getTimetable(@CurrentUser UserPrincipal currentUser) {
+        Hod hod = hodRepository.findByUserId(currentUser.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("HOD not found"));
+        List<TimetableResponse> timetable = timetableService.getTimetableByDepartment(hod.getDepartment().getId());
+        return ResponseEntity.ok(timetable);
+    }
+
+    private SubjectResponse mapSubjectToResponse(Subject subject) {
+        SubjectResponse response = new SubjectResponse();
+        response.setId(subject.getId());
+        response.setName(subject.getName());
+        response.setCode(subject.getCode());
+        response.setCreditHours(subject.getCreditHours());
+        response.setType(subject.getIsElective() != null && subject.getIsElective() ? "ELECTIVE" : "CORE");
+        response.setSemester(subject.getSemester());
+        if (subject.getDepartment() != null) {
+            response.setDepartmentId(subject.getDepartment().getId());
+        }
+        return response;
     }
 }

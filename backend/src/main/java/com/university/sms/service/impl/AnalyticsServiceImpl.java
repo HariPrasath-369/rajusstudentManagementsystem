@@ -83,9 +83,11 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         List<TeacherRankingResponse> rankings = new ArrayList<>();
         
         for (Teacher teacher : teachers) {
-            double averageMarks = marksRepository.getAverageMarksByTeacher(teacher.getId());
+            Double avgMarksObj = marksRepository.getAverageMarksByTeacher(teacher.getId());
+            double averageMarks = avgMarksObj != null ? avgMarksObj : 0.0;
             double studentFeedback = getTeacherFeedback(teacher.getId());
-            double attendanceRate = attendanceRepository.getAverageAttendanceByTeacher(teacher.getId());
+            Double attRateObj = attendanceRepository.getAverageAttendanceByTeacher(teacher.getId());
+            double attendanceRate = attRateObj != null ? attRateObj : 0.0;
             
             double overallScore = (averageMarks * 0.4) + (studentFeedback * 0.3) + (attendanceRate * 0.3);
             
@@ -162,8 +164,10 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         List<StudentRiskPredictionResponse> predictions = new ArrayList<>();
         
         for (Student student : students) {
-            double attendancePercentage = attendanceRepository.getAttendancePercentage(student.getId());
-            double currentMarks = marksRepository.getAverageMarksByStudent(student.getId());
+            Double attPercentageObj = attendanceRepository.getAttendancePercentage(student.getId());
+            double attendancePercentage = attPercentageObj != null ? attPercentageObj : 0.0;
+            Double currMarksObj = marksRepository.getAverageMarksByStudent(student.getId());
+            double currentMarks = currMarksObj != null ? currMarksObj : 0.0;
             
             double riskScore = calculateRiskScore(attendancePercentage, currentMarks);
             String riskLevel = getRiskLevel(riskScore);
@@ -190,41 +194,107 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
         
-        List<Marks> marks = marksRepository.findByStudent(student);
+        List<Marks> allMarks = marksRepository.findByStudent(student);
+        Double currentAvgAttendance = attendanceRepository.getAverageAttendanceByStudent(studentId);
+
+        // Overall Stats
+        double totalPercentage = allMarks.stream()
+                .filter(m -> m.getMaxMarks() != null && m.getMarksObtained() != null)
+                .mapToDouble(m -> (m.getMarksObtained() / m.getMaxMarks()) * 100)
+                .average().orElse(0.0);
         
-        Map<String, List<Double>> subjectPerformance = new HashMap<>();
-        for (Marks mark : marks) {
-            subjectPerformance.computeIfAbsent(mark.getSubject().getName(), k -> new ArrayList<>())
-                    .add(mark.getMarksObtained());
+        List<Double> semAvgs = new ArrayList<>();
+        for (int i = 1; i <= 8; i++) {
+            Double avg = marksRepository.getAverageMarksByStudentAndSemester(studentId, i);
+            if (avg != null) semAvgs.add(avg);
         }
 
-        Double currentAvgMarks = marksRepository.getAverageMarksByStudent(studentId);
-        Double currentAvgAttendance = attendanceRepository.getAverageAttendanceByStudent(studentId);
+        StudentPerformanceResponse.OverallStats overall = StudentPerformanceResponse.OverallStats.builder()
+                .cgpa((totalPercentage / 100.0) * 10.0)
+                .semesterWiseAvg(semAvgs)
+                .attendance((currentAvgAttendance != null ? currentAvgAttendance : 0.0) * 100.0)
+                .improvement(0.2) // mockup
+                .rank(10) // mockup
+                .totalStudents((int) studentRepository.count())
+                .build();
+
+        // Subject Statistics
+        List<StudentPerformanceResponse.SubjectPerformanceStat> subjectStats = allMarks.stream()
+                .map(m -> {
+                    double marks = (m.getMaxMarks() != null && m.getMaxMarks() > 0 && m.getMarksObtained() != null) ? 
+                            (m.getMarksObtained() / m.getMaxMarks()) * 100 : 0;
+                    return StudentPerformanceResponse.SubjectPerformanceStat.builder()
+                            .subject(m.getSubject().getName())
+                            .marks(marks)
+                            .grade(calculateGrade(marks))
+                            .credits(3)
+                            .trend("stable")
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        // Semester Statistics
+        List<StudentPerformanceResponse.SemesterPerformanceStat> semesterStats = new ArrayList<>();
+        Map<Integer, List<Marks>> semMarks = allMarks.stream()
+                .filter(m -> m.getSemester() != null)
+                .collect(Collectors.groupingBy(Marks::getSemester));
         
-        List<PerformanceTrend> trend = new ArrayList<>();
-        for (int i = 1; i <= 8; i++) {
-            Double semAvg = marksRepository.getAverageMarksByStudentAndSemester(studentId, i);
-            if (semAvg != null) {
-                trend.add(PerformanceTrend.builder()
-                        .semester(i)
-                        .averageMarks(semAvg)
-                        .build());
-            }
-        }
-        
-        List<Object[]> attendanceTrendData = attendanceRepository.getTrendData(studentId);
-        // Process attendance trend if needed in the future
-        
+        semMarks.forEach((sem, marksList) -> {
+            double avg = marksList.stream()
+                    .filter(m -> m.getMaxMarks() != null && m.getMarksObtained() != null)
+                    .mapToDouble(m -> (m.getMarksObtained() / m.getMaxMarks()) * 100)
+                    .average().orElse(0.0);
+            semesterStats.add(StudentPerformanceResponse.SemesterPerformanceStat.builder()
+                    .semester(sem)
+                    .sgpa((avg / 100.0) * 10.0)
+                    .credits(marksList.size() * 3)
+                    .rank(12)
+                    .build());
+        });
+        semesterStats.sort(Comparator.comparing(StudentPerformanceResponse.SemesterPerformanceStat::getSemester));
+
+        // Predictions (Mock)
+        List<StudentPerformanceResponse.PredictionStat> predictions = List.of(
+            StudentPerformanceResponse.PredictionStat.builder()
+                .metric("Expected CGPA")
+                .value(String.format("%.2f", (totalPercentage / 100.0) * 10.0 + 0.1))
+                .confidence(85)
+                .trend("up")
+                .build()
+        );
+
+        // Recommendations
+        double riskScore = calculateRiskScore(currentAvgAttendance != null ? currentAvgAttendance * 100 : 0, totalPercentage);
+        String riskLevel = getRiskLevel(riskScore);
+        List<String> recsStrings = getRecommendations(riskLevel);
+        List<StudentPerformanceResponse.RecommendationStat> recommendations = recsStrings.stream()
+                .map(s -> StudentPerformanceResponse.RecommendationStat.builder()
+                        .area("Academic")
+                        .suggestion(s)
+                        .priority(riskLevel.equals("HIGH") ? "high" : "medium")
+                        .build())
+                .collect(Collectors.toList());
+
         return StudentPerformanceResponse.builder()
-                .studentId(studentId)
                 .studentName(student.getUser().getName())
                 .rollNumber(student.getRollNumber())
                 .className(student.getStudentClass().getClassName())
-                .overallPercentage(currentAvgMarks != null ? currentAvgMarks : 0.0)
-                .attendancePercentage((currentAvgAttendance != null ? currentAvgAttendance : 0.0) * 100.0)
-                .performanceTrend(trend)
-                .subjectPerformance(subjectPerformance)
+                .overallPercentage(totalPercentage)
+                .overall(overall)
+                .subjectWise(subjectStats)
+                .semesterWise(semesterStats)
+                .predictions(predictions)
+                .recommendations(recommendations)
                 .build();
+    }
+
+    private String calculateGrade(double percentage) {
+        if (percentage >= 90) return "A+";
+        if (percentage >= 80) return "A";
+        if (percentage >= 70) return "B";
+        if (percentage >= 60) return "C";
+        if (percentage >= 50) return "D";
+        return "F";
     }
 
     @Override
@@ -240,8 +310,10 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         int failures = 0;
         
         for (Student student : students) {
-            double studentMarks = marksRepository.getAverageMarksByStudent(student.getId());
-            double studentAttendance = attendanceRepository.getAttendancePercentage(student.getId());
+            Double stMarksObj = marksRepository.getAverageMarksByStudent(student.getId());
+            double studentMarks = stMarksObj != null ? stMarksObj : 0.0;
+            Double stAttObj = attendanceRepository.getAttendancePercentage(student.getId());
+            double studentAttendance = stAttObj != null ? stAttObj : 0.0;
             
             averageMarks += studentMarks;
             averageAttendance += studentAttendance;
@@ -326,15 +398,15 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         
         try {
             List<Map<String, Object>> mapData = performances.stream().map(r -> {
-            Map<String, Object> map = new HashMap<>();
-            map.put("studentName", r.getStudentName());
-            map.put("rollNumber", r.getRollNumber());
-            map.put("className", r.getClassName());
-            map.put("percentage", r.getOverallPercentage());
-            return map;
-        }).collect(Collectors.toList());
+                Map<String, Object> map = new HashMap<>();
+                map.put("studentName", r.getStudentName());
+                map.put("rollNumber", r.getRollNumber());
+                map.put("className", r.getClassName());
+                map.put("percentage", r.getOverallPercentage());
+                return map;
+            }).collect(Collectors.toList());
 
-        return pdfGenerator.generatePerformanceReport(academicYear, mapData);
+            return pdfGenerator.generatePerformanceReport(academicYear, mapData);
         } catch (Exception e) {
             throw new RuntimeException("Error generating report", e);
         }
@@ -380,6 +452,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     private double calculatePassRate(Long departmentId) {
-        return marksRepository.getPassRateByDepartment(departmentId);
+        Double rate = marksRepository.getPassRateByDepartment(departmentId);
+        return rate != null ? rate : 0.0;
     }
 }

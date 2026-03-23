@@ -2,9 +2,7 @@ package com.university.sms.service.impl;
 
 import com.university.sms.dto.request.MarksRequest;
 import com.university.sms.dto.request.OemBoardRequest;
-import com.university.sms.dto.response.MarksResponse;
-import com.university.sms.dto.response.OemBoardEntry;
-import com.university.sms.dto.response.OemBoardResponse;
+import com.university.sms.dto.response.*;
 import com.university.sms.exception.BadRequestException;
 import com.university.sms.exception.ResourceNotFoundException;
 import com.university.sms.model.*;
@@ -40,6 +38,9 @@ public class MarksServiceImpl implements MarksService {
     private ClassSubjectRepository classSubjectRepository;
 
     @Autowired
+    private TeacherRepository teacherRepository;
+
+    @Autowired
     private EmailService emailService;
 
     @Autowired
@@ -50,7 +51,10 @@ public class MarksServiceImpl implements MarksService {
 
     @Override
     @Transactional
-    public void uploadMarks(MarksRequest request, Long teacherId) {
+    public void uploadMarks(MarksRequest request, Long userId) {
+        Teacher teacher = teacherRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Teacher not found"));
+        
         Subject subject = subjectRepository.findById(request.getSubjectId())
                 .orElseThrow(() -> new ResourceNotFoundException("Subject not found"));
 
@@ -70,7 +74,7 @@ public class MarksServiceImpl implements MarksService {
             marks.setMaxMarks(request.getMaxMarks());
             marks.setAcademicYear(request.getAcademicYear());
             marks.setSemester(request.getSemester());
-            marks.setEnteredBy(teacherId);
+            marks.setEnteredBy(teacher.getId());
             marks.setEnteredAt(LocalDateTime.now());
             marks.setIsPublished(false);
 
@@ -80,8 +84,11 @@ public class MarksServiceImpl implements MarksService {
 
     @Override
     @Transactional
-    public void uploadMarksFromExcel(MultipartFile file, Long subjectId, Integer semester, Long teacherId) {
+    public void uploadMarksFromExcel(MultipartFile file, Long subjectId, Integer semester, Long userId) {
         try {
+            Teacher teacher = teacherRepository.findByUserId(userId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Teacher not found"));
+            
             List<Map<String, Object>> excelData = ExcelUtils.parseExcel(file);
             Subject subject = subjectRepository.findById(subjectId)
                     .orElseThrow(() -> new ResourceNotFoundException("Subject not found"));
@@ -104,7 +111,7 @@ public class MarksServiceImpl implements MarksService {
                 marks.setMarksObtained(marksObtained);
                 marks.setMaxMarks(100.0);
                 marks.setSemester(semester);
-                marks.setEnteredBy(teacherId);
+                marks.setEnteredBy(teacher.getId());
                 marks.setEnteredAt(LocalDateTime.now());
                 marks.setIsPublished(false);
 
@@ -131,7 +138,10 @@ public class MarksServiceImpl implements MarksService {
 
     @Override
     @Transactional
-    public void publishMarks(Long subjectId, Integer semester, Long teacherId) {
+    public void publishMarks(Long subjectId, Integer semester, Long userId) {
+        Teacher teacher = teacherRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Teacher not found"));
+                
         List<Marks> marks = marksRepository.findBySubjectIdAndSemester(subjectId, semester);
         
         if (marks.isEmpty()) {
@@ -152,7 +162,7 @@ public class MarksServiceImpl implements MarksService {
                                     mark.getSubject().getName(), semester))
                             .type("MARKS")
                             .build(),
-                    teacherId);
+                    teacher.getId());
 
             // Send email
             emailService.sendMarksPublishedEmail(
@@ -170,8 +180,8 @@ public class MarksServiceImpl implements MarksService {
     }
 
     @Override
-    public List<MarksResponse> getMarksByStudent(Long studentId) {
-        Student student = studentRepository.findById(studentId)
+    public List<MarksResponse> getMarksByStudent(Long userId) {
+        Student student = studentRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
                 
         return marksRepository.findByStudent(student).stream()
@@ -180,8 +190,8 @@ public class MarksServiceImpl implements MarksService {
     }
 
     @Override
-    public List<MarksResponse> getStudentMarks(Long studentId) {
-        return getMarksByStudent(studentId);
+    public List<MarksResponse> getStudentMarks(Long userId) {
+        return getMarksByStudent(userId);
     }
 
     @Override
@@ -224,31 +234,34 @@ public class MarksServiceImpl implements MarksService {
 
     @Override
     @Transactional
-    public void fillOemBoard(OemBoardRequest request, Long teacherId) {
+    public void fillOemBoard(OemBoardRequest request, Long userId) {
+        Teacher teacher = teacherRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Teacher not found"));
+                
         for (OemBoardEntry entry : request.getEntries()) {
             Student student = studentRepository.findById(entry.getStudentId())
                     .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
             
             if (entry.getAssessmentMarks() != null) {
                 saveOrUpdateMarks(student, request.getSubjectId(), MarksType.ASSESSMENT, 
-                        entry.getAssessmentMarks(), request.getSemester(), teacherId);
+                        entry.getAssessmentMarks(), request.getSemester(), teacher.getId());
             }
             
             if (entry.getPracticalMarks() != null) {
                 saveOrUpdateMarks(student, request.getSubjectId(), MarksType.PRACTICAL, 
-                        entry.getPracticalMarks(), request.getSemester(), teacherId);
+                        entry.getPracticalMarks(), request.getSemester(), teacher.getId());
             }
             
             if (entry.getSemesterMarks() != null) {
                 saveOrUpdateMarks(student, request.getSubjectId(), MarksType.SEMESTER, 
-                        entry.getSemesterMarks(), request.getSemester(), teacherId);
+                        entry.getSemesterMarks(), request.getSemester(), teacher.getId());
             }
         }
     }
 
     @Override
-    public byte[] generateMarksheet(Long studentId, Integer semester) {
-        Student student = studentRepository.findById(studentId)
+    public byte[] generateMarksheet(Long userId, Integer semester) {
+        Student student = studentRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
         
         List<Marks> marks = marksRepository.findByStudentAndSemester(student, semester);
@@ -319,6 +332,70 @@ public class MarksServiceImpl implements MarksService {
             total += semester.getMarksObtained();
         }
         return total;
+    }
+
+    @Override
+    public StudentMarksDashboardResponse getStudentMarksDashboard(Long userId, Integer semester) {
+        Student student = studentRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
+
+        List<Marks> allMarks = marksRepository.findByStudent(student);
+        
+        // Calculate CGPA (simple avg for now)
+        double totalPercentage = allMarks.stream()
+                .filter(m -> m.getMaxMarks() != null && m.getMarksObtained() != null)
+                .mapToDouble(m -> (m.getMarksObtained() / m.getMaxMarks()) * 100)
+                .average()
+                .orElse(0.0);
+        double cgpa = (totalPercentage / 100.0) * 10.0;
+
+        // Semester-wise GPA
+        Map<Integer, List<Marks>> semMarks = allMarks.stream()
+                .collect(Collectors.groupingBy(Marks::getSemester));
+        
+        List<StudentMarksDashboardResponse.SemesterGpaStat> sgpaList = semMarks.entrySet().stream()
+                .map(entry -> {
+                    double semAvg = entry.getValue().stream()
+                            .filter(m -> m.getMaxMarks() != null && m.getMarksObtained() != null)
+                            .mapToDouble(m -> (m.getMarksObtained() / m.getMaxMarks()) * 100)
+                            .average()
+                            .orElse(0.0);
+                    return StudentMarksDashboardResponse.SemesterGpaStat.builder()
+                            .semester(entry.getKey())
+                            .gpa((semAvg / 100.0) * 10.0)
+                            .build();
+                })
+                .sorted(Comparator.comparing(StudentMarksDashboardResponse.SemesterGpaStat::getSemester))
+                .collect(Collectors.toList());
+
+        // Subject-wise marks
+        List<Marks> targetMarks = semester != null ? 
+                allMarks.stream().filter(m -> m.getSemester().equals(semester)).collect(Collectors.toList()) :
+                allMarks;
+
+        List<StudentMarksDashboardResponse.SubjectMarksStat> subjectStats = targetMarks.stream()
+                .map(m -> StudentMarksDashboardResponse.SubjectMarksStat.builder()
+                        .subject(m.getSubject().getName())
+                        .marks(m.getMarksObtained() != null ? m.getMarksObtained().intValue() : 0)
+                        .total(m.getMaxMarks() != null ? m.getMaxMarks().intValue() : 100)
+                        .percentage(m.getMaxMarks() != null && m.getMarksObtained() != null ? 
+                                (m.getMarksObtained() / m.getMaxMarks()) * 100 : 0)
+                        .build())
+                .collect(Collectors.toList());
+
+        // Trend
+        List<StudentMarksDashboardResponse.PerformanceTrendStat> trend = new ArrayList<>();
+        sgpaList.forEach(s -> trend.add(StudentMarksDashboardResponse.PerformanceTrendStat.builder()
+                .name("Sem " + s.getSemester())
+                .value(s.getGpa())
+                .build()));
+
+        return StudentMarksDashboardResponse.builder()
+                .cgpa(cgpa)
+                .sgpa(sgpaList)
+                .subjectWise(subjectStats)
+                .performanceTrend(trend)
+                .build();
     }
 
     private MarksResponse mapToResponse(Marks marks) {

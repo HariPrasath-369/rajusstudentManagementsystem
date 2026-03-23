@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { GraduationCap, Plus, Edit, Trash2, Users, BookOpen, UserCheck, Calendar } from 'lucide-react';
 import Card from '../../components/Common/Card';
@@ -30,9 +31,19 @@ const Classes = () => {
     teacherIds: {}
   });
 
+  const location = useLocation();
+
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (location.pathname === '/hod/classes/create') {
+      setModalOpen(true);
+    } else if (location.pathname === '/hod/classes/assign-subjects') {
+      setAssignModalOpen(true);
+    }
+  }, [location.pathname]);
 
   const fetchData = async () => {
     try {
@@ -46,7 +57,6 @@ const Classes = () => {
       setTeachers(teachersData);
       setSubjects(subjectsData);
     } catch (error) {
-      toast.error('Failed to fetch data');
       setClasses(getMockClasses());
       setTeachers(getMockTeachers());
       setSubjects(getMockSubjects());

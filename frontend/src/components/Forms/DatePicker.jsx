@@ -85,9 +85,10 @@ const DatePicker = ({
     w-full rounded-xl border transition-all duration-200 cursor-pointer
     flex items-center justify-between bg-white dark:bg-gray-800
     ${sizes[size]}
-    ${hasError 
-      ? 'border-red-500 focus:ring-2 focus:ring-red-500' 
-      : 'border-gray-300 dark:border-gray-600 hover:border-primary-400'
+    ${
+      hasError
+        ? 'border-red-500 focus:ring-2 focus:ring-red-500'
+        : 'border-gray-300 dark:border-gray-600 hover:border-primary-400'
     }
     ${disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed opacity-60' : ''}
     ${className}
@@ -103,11 +104,10 @@ const DatePicker = ({
       )}
       
       <div className="relative">
-        <button
-          type="button"
+        <div
           onClick={() => !disabled && setIsOpen(!isOpen)}
           className={inputClasses}
-          disabled={disabled}
+          aria-disabled={disabled}
         >
           <div className="flex items-center gap-2">
             <Calendar size={18} className="text-gray-400" />
@@ -123,7 +123,7 @@ const DatePicker = ({
               <X size={16} className="text-gray-400" />
             </button>
           )}
-        </button>
+        </div>
         
         <AnimatePresence>
           {isOpen && !disabled && (
@@ -166,7 +166,7 @@ const DatePicker = ({
               <div className="grid grid-cols-7 gap-1">
                 {calendarDays.map((day, index) => {
                   if (!day) {
-                    return <div key={`blank-${index}`} className="h-9" />;
+                    return <div key={`blank - ${ index } `} className="h-9" />;
                   }
                   
                   const isSelected = selectedDate && isSameDay(day, selectedDate);
@@ -180,15 +180,16 @@ const DatePicker = ({
                       onClick={() => !isDisabled && handleDateSelect(day)}
                       disabled={isDisabled}
                       className={`
-                        h-9 rounded-lg text-sm transition-all duration-200
-                        ${!isCurrentMonth ? 'text-gray-400 dark:text-gray-600' : 'text-gray-700 dark:text-gray-300'}
-                        ${isSelected 
-                          ? 'bg-primary-600 text-white hover:bg-primary-700' 
-                          : 'hover:bg-gray-100 dark:hover:bg-gray-700'
-                        }
-                        ${isTodayDate && !isSelected ? 'border border-primary-500' : ''}
-                        ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-                      `}
+h - 9 rounded - lg text - sm transition - all duration - 200
+                        ${ !isCurrentMonth ? 'text-gray-400 dark:text-gray-600' : 'text-gray-700 dark:text-gray-300' }
+                        ${
+  isSelected
+    ? 'bg-primary-600 text-white hover:bg-primary-700'
+    : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+}
+                        ${ isTodayDate && !isSelected ? 'border border-primary-500' : '' }
+                        ${ isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer' }
+`}
                     >
                       {format(day, 'd')}
                     </button>

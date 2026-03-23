@@ -12,6 +12,7 @@ public interface TimetableService {
     List<TimetableResponse> getTimetableByClass(Long classId);
     WeeklyTimetableResponse getWeeklyTimetable(Long classId);
     List<TimetableResponse> getTimetableByTeacher(Long teacherId);
+    List<TimetableResponse> getTimetableByDepartment(Long deptId);
     TeacherWorkloadResponse getTeacherWorkload(Long teacherId);
     void generateAutoTimetable(Long classId, Long hodId);
     void generateAutoTimetable(Long classId, List<Long> subjectIds, List<Long> teacherIds);

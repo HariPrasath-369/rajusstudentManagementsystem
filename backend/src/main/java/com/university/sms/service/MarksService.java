@@ -4,6 +4,7 @@ import com.university.sms.dto.request.MarksRequest;
 import com.university.sms.dto.request.OemBoardRequest;
 import com.university.sms.dto.response.MarksResponse;
 import com.university.sms.dto.response.OemBoardResponse;
+import com.university.sms.dto.response.StudentMarksDashboardResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -19,4 +20,5 @@ public interface MarksService {
     void fillOemBoard(OemBoardRequest request, Long teacherId);
     byte[] generateMarksheet(Long studentId, Integer semester);
     List<MarksResponse> getStudentMarks(Long studentId);
+    StudentMarksDashboardResponse getStudentMarksDashboard(Long studentId, Integer semester);
 }

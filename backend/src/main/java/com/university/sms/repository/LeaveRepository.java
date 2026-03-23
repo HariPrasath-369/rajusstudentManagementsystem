@@ -37,4 +37,7 @@ public interface LeaveRepository extends JpaRepository<Leave, Long> {
 
     @Query("SELECT l FROM Leave l WHERE l.student.studentClass.id = :classId")
     List<Leave> findByClassId(@Param("classId") Long classId);
+
+    @Query("SELECT COUNT(l) FROM Leave l WHERE l.student.studentClass.advisor.id = :advisorId AND l.status = 'PENDING'")
+    long countPendingByAdvisorId(@Param("advisorId") Long advisorId);
 }

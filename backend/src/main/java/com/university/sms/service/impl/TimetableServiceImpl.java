@@ -5,7 +5,6 @@ import com.university.sms.dto.response.*;
 import com.university.sms.exception.BadRequestException;
 import com.university.sms.exception.ResourceNotFoundException;
 import com.university.sms.model.*;
-import com.university.sms.model.Class;
 import com.university.sms.model.enums.DayOfWeek;
 import com.university.sms.repository.*;
 import com.university.sms.service.TimetableService;
@@ -138,6 +137,14 @@ public class TimetableServiceImpl implements TimetableService {
                 .orElseThrow(() -> new ResourceNotFoundException("Teacher not found"));
                 
         return timetableRepository.findByTeacher(teacher)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TimetableResponse> getTimetableByDepartment(Long deptId) {
+        return timetableRepository.findByDepartmentId(deptId)
                 .stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
