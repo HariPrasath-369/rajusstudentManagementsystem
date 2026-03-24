@@ -29,7 +29,7 @@ const MyAttendance = () => {
       setAttendanceData(response);
     } catch (error) {
       console.error('Failed to fetch attendance data:', error);
-      toast.error('Failed to load attendance data');
+      // toast.error('Failed to load attendance data');
       setAttendanceData(getMockData());
     } finally {
       setLoading(false);

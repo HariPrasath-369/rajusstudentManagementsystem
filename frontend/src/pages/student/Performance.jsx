@@ -29,7 +29,7 @@ const Performance = () => {
       setPerformanceData(response);
     } catch (error) {
       console.error('Failed to fetch performance data:', error);
-      toast.error('Failed to load performance data');
+      //  toast.error('Failed to load performance data');
       setPerformanceData(getMockData());
     } finally {
       setLoading(false);

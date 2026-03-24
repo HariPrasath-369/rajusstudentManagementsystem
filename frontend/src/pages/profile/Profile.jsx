@@ -81,7 +81,7 @@ const Profile = () => {
       setProfileData(data);
     } catch (error) {
       console.error('Failed to fetch profile:', error);
-      toast.error('Failed to load profile data');
+      // toast.error('Failed to load profile data');
       setProfileData(getMockProfileData());
     } finally {
       setLoading(false);

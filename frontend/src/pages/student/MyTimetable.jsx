@@ -27,7 +27,7 @@ const MyTimetable = () => {
       setTimetable(data);
     } catch (error) {
       console.error('Failed to fetch timetable:', error);
-      toast.error('Failed to load timetable');
+      // toast.error('Failed to load timetable');
       setTimetable(getMockTimetable());
     } finally {
       setLoading(false);

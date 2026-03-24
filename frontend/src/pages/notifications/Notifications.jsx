@@ -58,7 +58,7 @@ const Notifications = () => {
       setNotifications(Array.isArray(notificationsList) ? notificationsList : []);
     } catch (error) {
       console.error('Failed to fetch notifications:', error);
-      toast.error('Failed to load notifications');
+      // toast.error('Failed to load notifications');
       setNotifications(getMockNotifications());
     } finally {
       setLoading(false);

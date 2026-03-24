@@ -53,7 +53,7 @@ const EditProfile = () => {
         motherName: data.motherName || ''
       });
     } catch (error) {
-      toast.error('Failed to load profile data');
+      // toast.error('Failed to load profile data');
       setFormData({
         name: user?.name || '',
         email: user?.email || '',

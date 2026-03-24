@@ -30,7 +30,7 @@ const MyMarks = () => {
       setMarksData(response);
     } catch (error) {
       console.error('Failed to fetch marks data:', error);
-      toast.error('Failed to load marks data');
+      // toast.error('Failed to load marks data');
       setMarksData(getMockData());
     } finally {
       setLoading(false);

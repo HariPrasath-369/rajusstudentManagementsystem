@@ -27,59 +27,7 @@ api.interceptors.request.use(
 );
 
 // Response interceptor for error handling
-api.interceptors.response.use(
-  (response) => {
-    return response.data;
-  },
-  (error) => {
-    if (error.response) {
-      const { status, data } = error.response;
 
-      // Handle different error statuses
-      switch (status) {
-        case 401:
-          // Unauthorized - clear token and redirect to login
-          localStorage.removeItem('sms_auth_token');
-          localStorage.removeItem('sms_user');
-          window.location.href = '/login';
-          toast.error('Session expired. Please login again.');
-          break;
-        case 403:
-          toast.error(data.message || 'You don\'t have permission to perform this action');
-          break;
-        case 404:
-          toast.error(data.message || 'Resource not found');
-          break;
-        case 409:
-          toast.error(data.message || 'Conflict occurred');
-          break;
-        case 422:
-          // Validation error
-          if (data.errors) {
-            Object.values(data.errors).forEach(errorMsg => {
-              toast.error(errorMsg);
-            });
-          } else {
-            toast.error(data.message || 'Validation failed');
-          }
-          break;
-        case 500:
-          toast.error('Server error. Please try again later.');
-          break;
-        default:
-          toast.error(data.message || 'An error occurred');
-      }
-    } else if (error.request) {
-      // Request made but no response
-      toast.error('Network error. Please check your connection.');
-    } else {
-      // Something happened in setting up the request
-      toast.error(error.message || 'Request failed');
-    }
-
-    return Promise.reject(error);
-  }
-);
 
 // Helper function for file uploads
 export const uploadFile = async (url, file, onProgress) => {

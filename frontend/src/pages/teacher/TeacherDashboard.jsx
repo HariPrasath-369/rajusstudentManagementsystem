@@ -65,7 +65,7 @@ const TeacherDashboard = () => {
       });
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
-      toast.error('Failed to load dashboard data');
+      // toast.error('Failed to load dashboard data');
     } finally {
       setLoading(false);
     }

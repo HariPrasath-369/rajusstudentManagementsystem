@@ -55,7 +55,7 @@ const HODDashboard = () => {
       setDashboardData(response);
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
-      toast.error('Failed to load dashboard data');
+      // toast.error('Failed to load dashboard data');
       setDashboardData({
         stats: { totalTeachers: 0, totalClasses: 0, totalStudents: 0, averageAttendance: 0, passPercentage: 0, pendingLeaves: 0, pendingApprovals: 0 },
         charts: { attendanceTrend: [], subjectPerformance: [] },

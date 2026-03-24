@@ -74,7 +74,7 @@ const PrincipalDashboard = () => {
       });
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
-      toast.error('Failed to load dashboard data');
+      // toast.error('Failed to load dashboard data');
       setDashboardData({
         stats: { totalStudents: 0, totalTeachers: 0, totalDepartments: 0, totalClasses: 0, averageAttendance: 0, overallPassRate: 0, topPerformingDept: '-', improvementRate: 0 },
         charts: { studentEnrollment: [], departmentPerformance: [], attendanceTrend: [] },

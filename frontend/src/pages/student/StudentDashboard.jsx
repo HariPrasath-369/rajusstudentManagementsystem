@@ -51,7 +51,7 @@ const StudentDashboard = () => {
       setDashboardData(response);
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
-      toast.error('Failed to load dashboard data');
+      // toast.error('Failed to load dashboard data');
       setDashboardData({
         stats: { attendancePercentage: 0, totalSubjects: 0, completedAssignments: 0, upcomingExams: 0, cgpa: 0, totalCredits: 0 },
         charts: { performanceTrend: [] },
